@@ -6,7 +6,7 @@ function FileCard({
   tags,
   language,
   parentFolder,
-  id,
+  // id,
   createdOn,
 }: {
   title: string;

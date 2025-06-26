@@ -2,7 +2,7 @@ import { useHotkey } from "@/hooks/useHotKeys";
 import { useTheme } from "@/providers/themeProvider";
 import Editor from "@monaco-editor/react";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function CodeEditor() {
   const [code, setCode] = useState<string>("");
@@ -13,6 +13,7 @@ function CodeEditor() {
     setCode(updatedCode);
   };
 
+  console.log("code =>", code);
   const context = useTheme();
   useHotkey("Ctrl+s", () => console.log("Save snippet"));
   return (

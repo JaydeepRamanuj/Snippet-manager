@@ -1,6 +1,3 @@
-import { useHotkey } from "@/hooks/useHotKeys";
-import { useAppStore } from "@/store/appStore";
-
 export function Shortcuts() {
   // const { setNewFolderDialog, setNewFileDialog } = useAppStore();
   //   const toggleSidebar = useUIStore((s) => s.toggleSidebar);

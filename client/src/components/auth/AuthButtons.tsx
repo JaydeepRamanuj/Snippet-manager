@@ -1,9 +1,9 @@
 import { Github, Mail } from "lucide-react";
 import { Button } from "../ui/button";
-import { useClerk } from "@clerk/clerk-react";
+// import { useClerk } from "@clerk/clerk-react";
 
 function OAuthButtons() {
-  const { openSignIn } = useClerk();
+  // const { openSignIn } = useClerk();
 
   return (
     <div className="flex flex-col gap-2 mt-2">

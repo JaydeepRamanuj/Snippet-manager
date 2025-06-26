@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Plus, Search, Settings } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import {
   Sidebar,
@@ -20,36 +20,6 @@ import SearchBar from "./SearchBar";
 import UserDropdown from "./UserDropDowb";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useAppStore } from "@/store/appStore";
-
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
-
-// useHotkey("Ctrl+s", () => console.log("Save snippet"));
 
 const folders = [
   { id: 1, title: "JavaScript", isOpen: false, fileCount: 2 },
