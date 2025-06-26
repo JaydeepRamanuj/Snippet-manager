@@ -1,6 +1,8 @@
 import { useHotkey } from "@/hooks/useHotKeys";
+import { useTheme } from "@/providers/themeProvider";
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 
 function CodeEditor() {
   const [code, setCode] = useState<string>("");
@@ -11,15 +13,15 @@ function CodeEditor() {
     setCode(updatedCode);
   };
 
+  const context = useTheme();
   useHotkey("Ctrl+s", () => console.log("Save snippet"));
   return (
-    <div className="h-screen p-3 rounded-lg shadow-lg bg-accent">
+    <div className="p-3 h-full rounded-lg shadow-lg bg-accent">
       <Editor
         defaultLanguage="javascript"
         defaultValue="// Namaste World"
         onChange={handleEditorChange}
-        theme="vs-dark"
-        // theme="adromeda"
+        theme={context.theme == "dark" ? "vs-dark" : "light"}
         options={{
           // readOnly: true,
           minimap: { enabled: true },

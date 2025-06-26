@@ -1,26 +1,23 @@
-import {
-  useEditor,
-  EditorContent,
-  FloatingMenu,
-  BubbleMenu,
-} from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-
-const extensions = [StarterKit];
-const content = "<p>Hello World!</p>";
+import type { Content } from "@tiptap/react";
+import { useState } from "react";
+import { MinimalTiptapEditor } from "./minimal-tiptap";
 
 function NoteEditor() {
-  const editor = useEditor({
-    extensions,
-    content,
-  });
-
+  const [value, setValue] = useState<Content>("");
   return (
-    <>
-      <EditorContent editor={editor} />
-      <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu>
-      <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu>
-    </>
+    <div className="h-full">
+      <MinimalTiptapEditor
+        value={value}
+        onChange={setValue}
+        className="w-full"
+        editorContentClassName="p-5"
+        output="html"
+        placeholder="Enter your description..."
+        autofocus={false}
+        editable={true}
+        editorClassName="focus:outline-hidden"
+      />
+    </div>
   );
 }
 export default NoteEditor;

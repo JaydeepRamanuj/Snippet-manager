@@ -14,9 +14,18 @@ export const unregisterHotkey = (key: string) => {
 
 // This will handle keyboard event by getting function mapped to that specific hotKey
 export const handleGlobalKeydown = (e: KeyboardEvent) => {
-  const key = `${e.ctrlKey ? "Ctrl+" : ""}${e.key.toLowerCase()}`;
+  let key = "";
+  if (e.ctrlKey && e.shiftKey) {
+    key = `Ctrl+Shift+${e.key.toLowerCase()}`;
+  } else if (e.ctrlKey && !e.shiftKey) {
+    key = `Ctrl+${e.key.toLowerCase()}`;
+  } else {
+    key = "";
+  }
+  // getting mapped callback from hotKeyMap
   const action = hotkeyMap.get(key);
   if (action) {
+    // preventing it so it don't trigger browser shortcuts
     e.preventDefault();
     action();
   }
