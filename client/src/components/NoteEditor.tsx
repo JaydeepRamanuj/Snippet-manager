@@ -1,21 +1,17 @@
-import type { Content } from "@tiptap/react";
 import { useState } from "react";
-import { MinimalTiptapEditor } from "./minimal-tiptap";
+import { SimpleEditor } from "./tiptap-templates/simple/simple-editor";
 
 function NoteEditor() {
-  const [value, setValue] = useState<Content>("");
+  const [value, setValue] = useState("<p>Write your comments here...</p>");
+
+  // console.log("value =>", value);
   return (
     <div className="h-full">
-      <MinimalTiptapEditor
+      <SimpleEditor
         value={value}
-        onChange={setValue}
-        className="w-full"
-        editorContentClassName="p-5"
-        output="html"
-        placeholder="Enter your description..."
-        autofocus={false}
-        editable={true}
-        editorClassName="focus:outline-hidden"
+        onChange={(value) => {
+          typeof value === "string" && setValue(value);
+        }}
       />
     </div>
   );

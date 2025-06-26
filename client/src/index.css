@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 
 
+@import './styles/_variables.scss';
+@import './styles/_keyframe-animations.scss';
+
+
 @theme {
   --color-primary: oklch(0.6 0.1 200);
   --font-main: "Inter", sans-serif;

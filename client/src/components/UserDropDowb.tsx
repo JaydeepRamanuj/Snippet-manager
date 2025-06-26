@@ -24,7 +24,6 @@ function UserDropdown() {
     });
   };
 
-  console.log("isSignedIn =>", isSignedIn);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

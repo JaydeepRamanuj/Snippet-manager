@@ -13,7 +13,6 @@ function CodeEditor() {
     setCode(updatedCode);
   };
 
-  console.log("code =>", code);
   const context = useTheme();
   useHotkey("Ctrl+s", () => console.log("Save snippet"));
   return (
