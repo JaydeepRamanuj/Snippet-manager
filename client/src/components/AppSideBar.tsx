@@ -20,6 +20,7 @@ import SearchBar from "./SearchBar";
 import UserDropdown from "./UserDropDowb";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useAppStore } from "@/store/appStore";
+import { useEffect } from "react";
 
 const folders = [
   { id: 1, title: "JavaScript", isOpen: false, fileCount: 2 },
@@ -94,6 +95,16 @@ export function AppSidebar() {
   const { open } = useSidebar();
   const handleAddNewFolder = () => setNewFolderDialog(true);
   const handleAddNewFile = () => setNewFileDialog(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await fetch("http://localhost:3000/api/snippets/");
+      console.log("response =>", response);
+    };
+
+    getData();
+  }, []);
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className={`${open && "p-1.5"}`}>
