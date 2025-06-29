@@ -20,7 +20,7 @@ export default function SearchBar({ onFocus }: { onFocus?: () => void }) {
           />
 
           <div className="pointer-events-none absolute right-3 top-1.5 hidden sm:flex items-center gap-1 text-xs text-muted-foreground border rounded px-1.5 py-0.5">
-            <Command className="h-3 w-3" />K
+            <Command className="h-3 w-3" />p
           </div>
         </div>
       ) : (
