@@ -14,7 +14,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // While in development, I'm keeping cors to accept all origins
 // But in production I will add client's domain
-app.use(cors());
+app.use(
+  cors({
+    // client origin
+    origin: "http://localhost:5173",
+
+    // // For clerk
+    // credentials: true,
+  })
+);
 
 // This clerk middleware will provide user'data and can be useful when we want to access userId or whole user Object
 app.use(clerkMiddleware());
@@ -35,7 +43,7 @@ app.use(
     next: express.NextFunction
   ) => {
     console.error(err.stack);
-    res.status(500).send("Something broke!");
+    res.status(500).send("Something went wrong!");
   }
 );
 

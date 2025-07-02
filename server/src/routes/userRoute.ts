@@ -1,83 +1,93 @@
 import express, { Request, Response } from "express";
-import { getSnippets } from "../services/snippetServices";
-import { getAuth } from "@clerk/express";
+import { requireAuth } from "../middlewares/requireAuth";
+import {
+  createUser,
+  deleteUser,
+  getUserDetail,
+  updateUser,
+} from "../services/userServices";
+import { convertToMongoDBObjectId } from "./routeHelper";
 
 const router = express.Router();
 
-// Get all user data
-router.get("/", async (req: Request, res: Response) => {
+// Get specific user by Id
+router.get("/:id", requireAuth, async (req: Request, res: Response) => {
   try {
-    // Getting userId from clerk
-    const { userId } = getAuth(req);
+    const { id } = req.body;
 
-    // Use Clerk's JavaScript Backend SDK to get the user's User object
-    // const user = await clerkClient.users.getUser(userId)
+    const user = await getUserDetail(convertToMongoDBObjectId(id));
 
-    if (!userId) {
-      return res.status(401).send("Unauthorized: User ID not found.");
-    }
-
-    const snippets = await getSnippets({
-      type: "all",
-      userId: userId,
-    });
-    if (snippets) {
-      res.status(200).json(snippets);
+    if (user) {
+      res.status(201).json(user);
     } else {
-      res.status(500).send("Failed to fetch snippets.");
+      res.status(500).send("Failed to fetch user.");
     }
   } catch (error) {
-    console.error("Error getting snippets:", error);
+    console.error("Error getting user:", error);
     res.status(500).send("Internal Server Error.");
   }
 });
 
-// Get specific user by Id
-router.get("/folder/:id", async (req, res) => {
-  // Getting userId from clerk
-  const { userId } = getAuth(req);
-
-  // Use Clerk's JavaScript Backend SDK to get the user's User object
-  // const user = await clerkClient.users.getUser(userId)
-
-  if (!userId) {
-    return res.status(401).send("Unauthorized: User ID not found.");
-  }
-});
 // Create user
-router.post("/folder/:id", async (req, res) => {
-  // Getting userId from clerk
-  const { userId } = getAuth(req);
+router.post("/", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const user = req.body;
 
-  // Use Clerk's JavaScript Backend SDK to get the user's User object
-  // const user = await clerkClient.users.getUser(userId)
+    if (!user) return res.status(400).send("Bad Request.");
 
-  if (!userId) {
-    return res.status(401).send("Unauthorized: User ID not found.");
+    if (!user.name || !user.userId) {
+      return res.status(400).send("Missing required fields.");
+    }
+
+    const createResponse = await createUser(user);
+
+    if (user) {
+      res.status(201).send({ message: "Folder created", data: createResponse });
+    } else {
+      res.status(500).send("Failed to create user.");
+    }
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("Internal Server Error.");
   }
 });
+
 // Update user details
-router.patch("/folder/:id", async (req, res) => {
-  // Getting userId from clerk
-  const { userId } = getAuth(req);
+router.patch("/:id", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const { id } = req.params;
+    const userPart = req.body;
+    if (!userPart) return res.status(400).send("Bad Request.");
 
-  // Use Clerk's JavaScript Backend SDK to get the user's User object
-  // const user = await clerkClient.users.getUser(userId)
+    if (id !== userId) return res.status(401).json({ message: "Unauthorized" });
 
-  if (!userId) {
-    return res.status(401).send("Unauthorized: User ID not found.");
+    const updateResponse = await updateUser(
+      convertToMongoDBObjectId(id),
+      userPart
+    );
+    if (updateResponse) {
+      res.status(200).send("User updated");
+    } else {
+      res.status(500).send("Failed to update user.");
+    }
+  } catch (error) {
+    console.log("Error updating snippet", error);
+    res.status(500).send("Internal Server Error.");
   }
 });
+
 // Delete user By Id
-router.delete("/folder/:id", async (req, res) => {
-  // Getting userId from clerk
-  const { userId } = getAuth(req);
+router.delete("/:id", requireAuth, async (req: Request, res: Response) => {
+  const userId = (req as any).userId;
 
-  // Use Clerk's JavaScript Backend SDK to get the user's User object
-  // const user = await clerkClient.users.getUser(userId)
-
-  if (!userId) {
-    return res.status(401).send("Unauthorized: User ID not found.");
+  const { id } = req.params;
+  if (id !== userId) return res.status(401).json({ message: "Unauthorized" });
+  const deleteResponse = await deleteUser(convertToMongoDBObjectId(id));
+  if (deleteResponse) {
+    res.status(200).send("User Deleted");
+  } else {
+    res.status(500).send("Failed to delete user.");
   }
 });
 

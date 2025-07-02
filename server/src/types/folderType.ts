@@ -3,6 +3,6 @@ import { ObjectId } from "mongodb";
 export type FolderType = {
   _id: ObjectId;
   name: string;
-  parentId: ObjectId;
+  parentId?: string;
   userId: string;
 };

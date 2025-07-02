@@ -1,3 +1,4 @@
+import type { SnippetType } from "@/types/snippetType";
 import { create } from "zustand";
 
 type SortType = "recency" | "alphabetic";
@@ -13,6 +14,11 @@ interface AppState {
   showNewFileDialog: boolean;
   showAuthDialog: boolean;
   alertDialogMessage: string;
+  currentSnippet: string;
+  loadedSnippets: SnippetType[];
+  currentSnippetCode: string;
+  currentSnippetNote: string;
+  currentSnippetLanguage: string;
 
   toggleSidebar: () => void;
   setEditingMode: (value: boolean) => void;
@@ -26,6 +32,11 @@ interface AppState {
   setNewFileDialog: (value: boolean) => void;
   setAuthDialog: (value: boolean) => void;
   setAlertDialogMessage: (str: string) => void;
+  setCurrentSnippet: (snippetId: string) => void;
+  setLoadedSnippets: (snippets: SnippetType[]) => void;
+  setCurrentSnippetCode: (code: string) => void;
+  setCurrentSnippetNote: (note: string) => void;
+  setCurrentSnippetLanguage: (lang: string) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -39,6 +50,11 @@ export const useAppStore = create<AppState>((set) => ({
   sortType: "recency",
   filteringTags: [],
   alertDialogMessage: "",
+  currentSnippet: "",
+  loadedSnippets: [],
+  currentSnippetCode: "// Namaste World 🙏",
+  currentSnippetNote: "<p>Write your comments here...</p>",
+  currentSnippetLanguage: "javascript",
 
   toggleSidebar: () =>
     set((s) => ({ isSidebarCollapsed: !s.isSidebarCollapsed })),
@@ -51,6 +67,11 @@ export const useAppStore = create<AppState>((set) => ({
   setNewFileDialog: (v) => set({ showNewFileDialog: v }),
   setAuthDialog: (v) => set({ showAuthDialog: v }),
   setAlertDialogMessage: (str) => set({ alertDialogMessage: str }),
+  setCurrentSnippet: (snippetId) => set({ currentSnippet: snippetId }),
+  setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
+  setCurrentSnippetCode: (code) => set({ currentSnippetCode: code }),
+  setCurrentSnippetNote: (note) => set({ currentSnippetNote: note }),
+  setCurrentSnippetLanguage: (lang) => set({ currentSnippetLanguage: lang }),
 
   addTag: (tag) =>
     set((s) => ({ filteringTags: [...new Set([...s.filteringTags, tag])] })),

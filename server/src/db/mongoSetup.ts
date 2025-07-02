@@ -49,9 +49,7 @@ export async function connectToDatabase() {
 
     // Accessing database and passing that instance to _db
     _db = client.db(databaseName);
-    console.log("MongoDB is connected.", Error);
-
-    console.log(_db);
+    console.log("MongoDB is connected.");
   } catch (error) {
     console.log("Error establishing connection to mongoDB", Error);
   }

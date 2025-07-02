@@ -15,3 +15,33 @@ export function getUserId(req: Request, res: Response) {
 
   return userId;
 }
+
+// This will help standardize the response
+export type ResponseType = {
+  status: number;
+  message: string;
+  data?: any;
+  error?: any;
+};
+
+// Standardized successResponse
+// but don't forget to send actual response object
+
+export function successResponse(
+  res: Response,
+  message: string,
+  data?: any,
+  status = 200
+) {
+  return res.status(status).json({ status, message, data });
+}
+
+// Standardized error Response
+export function errorResponse(
+  res: Response,
+  message: string,
+  status = 500,
+  error?: any
+) {
+  return res.status(status).json({ status, message, error });
+}

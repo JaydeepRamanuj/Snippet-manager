@@ -1,5 +1,3 @@
-import { ObjectId } from "mongodb";
-
 export type Language =
   | "javascript"
   | "typescript"
@@ -14,13 +12,13 @@ export type Language =
   | "other";
 
 export interface SnippetType {
-  _id: ObjectId;
+  _id: string;
   userId: string;
-  folderId?: ObjectId;
+  folderId?: string;
   title: string;
   language: Language;
   tags?: string[];
-  code: string; // Monaco outout
+  code?: string; // Monaco outout
   note?: string; // TipTap output
   createdAt: string;
   lastUpdatedOn: string;

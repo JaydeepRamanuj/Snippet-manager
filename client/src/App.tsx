@@ -29,6 +29,7 @@ function App() {
               <AlertProvider>
                 <div className="flex  w-full h-screen">
                   <AppSidebar />
+
                   <main className="grow p-2 overflow-auto ">
                     <MainPage />
                     <CommandMenu />

@@ -1,6 +1,6 @@
 I was getting a type error
 
-```
+```bash
   The last overload gave the following error.
     Argument of type '(req: WithAuthProp<Request>, res: Response) => Promise<express.Response<any, Record<string, any>> | undefined>' is not assignable to parameter of type 'Application<Record<string, any>>'.
       Type '(req: WithAuthProp<Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>>, res: Response<any, Record<string, any>>) => Promise<...>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.ts(2769)
@@ -8,8 +8,7 @@ I was getting a type error
 
 on my snippetRoute.ts file (work in progress)
 
-```
-
+```js
 import express, { Request, Response } from "express";
 import { getSnippets } from "../services/snippetServices";
 import { getAuth } from "@clerk/express";
@@ -56,7 +55,6 @@ router.patch("/snippet/:id");
 router.delete("/snippet/:id");
 
 export default router;
-
 ```
 
 Tried adding `WithAuthProp<Request>` to avoid that error but turns out TypeScript is mistakenly try to pass it to `Application`. Turns out this is known issue.

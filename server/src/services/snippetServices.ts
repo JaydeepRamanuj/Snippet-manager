@@ -50,6 +50,7 @@ type getSnippetsType = {
   tags?: string[];
   fields?: string[];
   userId: string;
+  limit?: number;
 };
 
 export async function getSnippets({
@@ -58,6 +59,7 @@ export async function getSnippets({
   tags,
   fields,
   userId,
+  limit = 0,
 }: getSnippetsType): Promise<SnippetType[] | false> {
   try {
     const snippetCollection: Collection<SnippetType> =
@@ -69,7 +71,8 @@ export async function getSnippets({
       filter = { folderId: folderId, userId: userId };
     } else if (type == "tag") {
       filter = {
-        tags: { userId: userId, $in: tags },
+        userId: userId,
+        tags: { $in: tags },
       };
     } else {
       filter = { userId: userId };
@@ -81,6 +84,7 @@ export async function getSnippets({
           return acc;
         }, {} as Record<string, boolean>)
       : {
+          _id: true,
           title: true,
           lastUpdatedOn: true,
           language: true,
@@ -88,7 +92,9 @@ export async function getSnippets({
           folderId: true,
         };
 
-    const snippetsCursor = await snippetCollection?.find(filter, projection);
+    const snippetsCursor = await snippetCollection
+      ?.find(filter, projection)
+      .limit(limit);
 
     if (snippetsCursor) {
       const snippetsArray = await snippetsCursor.toArray();
@@ -102,7 +108,25 @@ export async function getSnippets({
   }
 }
 
-function getSingleSnippet(snippets: string[]) {}
+export async function getSingleSnippet(id: ObjectId, userId: string) {
+  try {
+    const snippetCollection: Collection<SnippetType> =
+      getCollection("snippets");
+
+    const snippet = await snippetCollection?.findOne({
+      _id: id,
+      userId: userId,
+    });
+    if (snippet) {
+      return snippet;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log("Error deleting snippet", error);
+    return false;
+  }
+}
 
 export async function deleteSnippet(
   id: ObjectId,

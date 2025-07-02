@@ -13,14 +13,17 @@ import {
 
 import { ThemeModeToggle } from "./ThemeModeToggle";
 import FolderCard from "./FolderCard";
-import FileCard from "./FileCard";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
 import SearchBar from "./SearchBar";
 import UserDropdown from "./UserDropDowb";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useAppStore } from "@/store/appStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import type { SnippetType } from "@/types/snippetType";
+import type { FolderType } from "@/types/folderType";
+import SnippetCard from "./SnippetCard";
 
 const folders = [
   { id: 1, title: "JavaScript", isOpen: false, fileCount: 2 },
@@ -93,17 +96,51 @@ const files = [
 export function AppSidebar() {
   const { setNewFileDialog, setNewFolderDialog } = useAppStore();
   const { open } = useSidebar();
+  // const [folders, setFolders] = useState<FolderType[]>([]);
+  const [snippets, setSnippets] = useState<SnippetType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleAddNewFolder = () => setNewFolderDialog(true);
   const handleAddNewFile = () => setNewFileDialog(true);
 
+  const { getToken, isLoaded } = useAuth();
+  const { user } = useUser();
+
+  const { loadedSnippets, setLoadedSnippets } = useAppStore();
+  // console.log("user.id =>", user?.id);
+
   useEffect(() => {
-    const getData = async () => {
-      const response = await fetch("http://localhost:3000/api/snippets/");
-      console.log("response =>", response);
+    setIsLoading(true);
+    const getSnippets = async () => {
+      const token = await getToken();
+      try {
+        const options = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        setIsLoading(true);
+        const response = await fetch("/api/snippets?limit=10", options);
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log("result =>", result);
+          setSnippets(result);
+          setLoadedSnippets(result);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log("Error getting snippets", error);
+        setIsLoading(false);
+      }
     };
 
-    getData();
-  }, []);
+    if (isLoaded && loadedSnippets.length == 0) {
+      getSnippets();
+    }
+  }, [user?.id]);
 
   return (
     <Sidebar collapsible="icon">
@@ -168,14 +205,15 @@ export function AppSidebar() {
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
                   <ScrollArea className="grow flex flex-col max-h-[80vh] overflow-auto pr-4">
-                    {files.map((file) => (
-                      <FileCard
-                        id={file.id}
-                        title={file.title}
-                        language={file.language}
-                        createdOn={file.createdOn}
-                        tags={file.tags}
-                        parentFolder={file.parentFolder}
+                    {snippets.map((snippet) => (
+                      <SnippetCard
+                        key={snippet._id}
+                        _id={snippet._id}
+                        title={snippet.title}
+                        language={snippet.language}
+                        createdAt={snippet.createdAt}
+                        tags={snippet.tags}
+                        folderName={snippet.folderName}
                       />
                     ))}
                   </ScrollArea>

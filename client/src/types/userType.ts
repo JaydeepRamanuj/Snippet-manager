@@ -1,7 +1,5 @@
-import { ObjectId } from "mongodb";
-
 export type UserType = {
-  _id: ObjectId;
+  _id: string;
   username: string;
   theme?: "light" | "dark";
 };

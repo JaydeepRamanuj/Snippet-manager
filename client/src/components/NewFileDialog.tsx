@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import {
   Dialog,
@@ -20,8 +18,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { InputTags } from "./InputTags";
 import { useAppStore } from "@/store/appStore";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import type { SnippetType } from "@/types/snippetType";
+import { formatDateToIndianStyle, isLanguage } from "@/lib/utils";
+import { toast } from "sonner";
 
-export function NewFileDialog({ onCreate }: { onCreate: (data: any) => void }) {
+export function NewFileDialog() {
   const { showNewFileDialog, setNewFileDialog } = useAppStore();
   const [title, setTitle] = useState("");
   const [parent, setParent] = useState("");
@@ -29,13 +31,60 @@ export function NewFileDialog({ onCreate }: { onCreate: (data: any) => void }) {
   const [tags, setTags] = useState<string[]>([]);
   const [error, setError] = useState("");
 
+  const { getToken } = useAuth();
+  const { user } = useUser();
+
+  const { setCurrentSnippet } = useAppStore();
+  const createNewSnippet = async () => {
+    const token = await getToken();
+
+    if (!user?.id) {
+      toast.warning("Please login to add new snippets.");
+      return;
+    }
+    const newSnippet: Omit<SnippetType, "_id"> = {
+      createdAt: formatDateToIndianStyle(),
+      language: isLanguage(language) ? language : "javascript",
+      lastUpdatedOn: formatDateToIndianStyle(),
+      title: title,
+      folderId: parent,
+      code: "// Namaste World 🙏",
+      note: "Write your comments here...",
+      tags: tags,
+      userId: user?.id,
+    };
+    try {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newSnippet),
+      };
+
+      const response = await fetch("/api/snippets/", options);
+
+      if (response.ok) {
+        response && toast.success("Snippet created");
+        const result = await response.json();
+
+        // console.log("result =>", result);
+        setCurrentSnippet(result.data);
+      }
+    } catch (error) {
+      console.log("Error creating snippet", error);
+      toast.error("Error creating snippet");
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !parent || !language) {
       setError("Please fill all required fields.");
       return;
     }
-    onCreate({ title, parent, language, tags });
+    createNewSnippet();
     setTitle("");
     setParent("");
     setLanguage("");
@@ -82,13 +131,23 @@ export function NewFileDialog({ onCreate }: { onCreate: (data: any) => void }) {
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>
-                {["TypeScript", "JavaScript", "Python", "Go", "Rust"].map(
-                  (lang) => (
-                    <SelectItem key={lang} value={lang}>
-                      {lang}
-                    </SelectItem>
-                  )
-                )}
+                {[
+                  "javascript",
+                  "typescript",
+                  "html",
+                  "css",
+                  "python",
+                  "cpp",
+                  "java",
+                  "go",
+                  "json",
+                  "bash",
+                  "other",
+                ].map((lang) => (
+                  <SelectItem key={lang} value={lang}>
+                    {lang}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
