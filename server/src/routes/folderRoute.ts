@@ -6,7 +6,7 @@ import {
   getFolderDetails,
   updateFolder,
 } from "../services/folderServices";
-import { convertToMongoDBObjectId } from "./routeHelper";
+import { toObjectId } from "./routeHelper";
 
 const router = express.Router();
 
@@ -35,7 +35,7 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
     const folder = await getFolderDetails({
       type: "specific",
       userId,
-      id: convertToMongoDBObjectId(id),
+      id: toObjectId(id),
     });
     if (folder) {
       res.status(200).json(folder);
@@ -80,7 +80,7 @@ router.patch("/:id", requireAuth, async (req: Request, res: Response) => {
   if (!folderPart) return res.status(400).send("Bad Request.");
 
   const deleteResponse = await updateFolder({
-    id: convertToMongoDBObjectId(id),
+    id: toObjectId(id),
     folder: folderPart,
     userId,
   });
@@ -97,7 +97,7 @@ router.delete("/:id", requireAuth, async (req: Request, res: Response) => {
   const { id } = req.params;
 
   const deleteResponse = await deleteFolder({
-    id: convertToMongoDBObjectId(id),
+    id: toObjectId(id),
     userId,
   });
   if (deleteResponse) {

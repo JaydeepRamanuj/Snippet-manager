@@ -1,3 +1,5 @@
+import { useHotkey } from "@/hooks/useHotKeys";
+
 export function Shortcuts() {
   // const { setNewFolderDialog, setNewFileDialog } = useAppStore();
   //   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
@@ -5,7 +7,7 @@ export function Shortcuts() {
   //   useHotkey("Ctrl+b", toggleSidebar); // example: toggle sidebar
   // useHotkey("Ctrl+s", () => console.log("Save snippet"));
   // useHotkey("Ctrl+Shift+n", () => setNewFileDialog(true));
-  // useHotkey("Ctrl+n", () => console.log("Save snippet"));
+  // useHotkey("Ctrl+s", () => console.log("Save snippet"));
 
   return null;
 }

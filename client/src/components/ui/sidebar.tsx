@@ -22,11 +22,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAppStore } from "@/store/appStore";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 // const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH = "24rem";
+const SIDEBAR_WIDTH = "500px";
 // const SIDEBAR_WIDTH = "30rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 
@@ -165,7 +166,7 @@ function Sidebar({
   collapsible?: "offcanvas" | "icon" | "none";
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
-
+  const { sideBarWidth } = useAppStore();
   // Adding my own logic to make sidebar resizable
   const isResizing = React.useRef(false);
   const sidebarRef = React.useRef<HTMLDivElement>(null);
@@ -196,6 +197,13 @@ function Sidebar({
     };
   }, []);
 
+  React.useEffect(() => {
+    sidebarRef.current &&
+      sidebarRef.current.style.setProperty(
+        "--sidebar-width",
+        `${sideBarWidth}px`
+      );
+  }, [sideBarWidth]);
   if (collapsible === "none") {
     return (
       <div

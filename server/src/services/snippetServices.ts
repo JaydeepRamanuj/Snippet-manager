@@ -23,17 +23,26 @@ export async function createSnippet(
 export async function updateSnippet(
   id: ObjectId,
   userId: string,
-  snippetPart: Partial<SnippetType>
+  snippetPart: SnippetType
 ): Promise<boolean> {
   try {
     const snippetCollection: Collection<SnippetType> =
       getCollection("snippets");
+
+    console.log("updateSnippet - Query ID:", id);
+    console.log("updateSnippet - Query userId:", userId);
+    console.log("updateSnippet - Fields to update:", snippetPart);
+
+    // const { _id, ...fieldsToUpdate } = snippetPart;
+
     const response = await snippetCollection?.updateOne(
       { _id: id, userId: userId },
       { $set: snippetPart }
     );
 
-    if (response) {
+    console.log(response);
+
+    if (response.modifiedCount > 0) {
       return response.acknowledged;
     } else {
       return false;
@@ -92,6 +101,8 @@ export async function getSnippets({
           folderId: true,
         };
 
+    // We get findCursor type from 'find' method which can't be directly passed
+    // So we have to convert it to array first
     const snippetsCursor = await snippetCollection
       ?.find(filter, projection)
       .limit(limit);

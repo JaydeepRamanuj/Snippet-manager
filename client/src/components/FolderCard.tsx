@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/context-menu";
 import { useEffect, useRef, useState } from "react";
 import useAlert from "@/providers/AlertProvider";
+import { useAppStore } from "@/store/appStore";
 
-function FolderCard({ name, isOpen }: { name: string; isOpen: boolean }) {
+function FolderCard({ id, name }: { id: string; name: string }) {
   const { open } = useSidebar();
   const [inpVal, setInpVal] = useState(name);
   const [renaming, setRenaming] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { currentFolder, setCurrentFolder } = useAppStore();
 
   const { showAlertWithPromise } = useAlert();
   useEffect(() => {
@@ -36,14 +38,27 @@ function FolderCard({ name, isOpen }: { name: string; isOpen: boolean }) {
 
     console.log(response);
   };
+
+  const handleClick = () => {
+    setCurrentFolder(id);
+  };
+
   return (
     <>
       <ContextMenu>
         <ContextMenuTrigger>
           {open ? (
-            <Card className="dark:hover:bg-white/5 hover:bg-black/5 p-0 rounded-md cursor-pointer dark:text-gray-300 dark:hover:text-gray-100 text-gray-700 mb-2 group relative">
+            <Card
+              className={` p-0 rounded-md cursor-pointer   mb-2 group relative 
+                ${
+                  currentFolder === id
+                    ? "text-blue-600 bg-blue-50 dark:text-white  dark:bg-white/10"
+                    : "dark:hover:bg-white/5 hover:bg-black/5 dark:text-gray-300 dark:hover:text-gray-100"
+                }`}
+              onClick={handleClick}
+            >
               <CardContent className="p-1.5 px-2 flex items-center justify-start gap-2">
-                {!renaming && isOpen ? (
+                {!renaming && currentFolder === id ? (
                   <FolderOpen size={16} />
                 ) : (
                   <Folder size={16} />
@@ -68,7 +83,11 @@ function FolderCard({ name, isOpen }: { name: string; isOpen: boolean }) {
             </Card>
           ) : (
             <Button size="icon" variant="outline">
-              {isOpen ? <FolderOpen size={16} /> : <Folder size={16} />}
+              {currentFolder === id ? (
+                <FolderOpen size={16} />
+              ) : (
+                <Folder size={16} />
+              )}
             </Button>
           )}
         </ContextMenuTrigger>

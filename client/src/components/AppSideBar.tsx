@@ -16,131 +16,143 @@ import FolderCard from "./FolderCard";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
 import SearchBar from "./SearchBar";
-import UserDropdown from "./UserDropDowb";
+
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useAppStore } from "@/store/appStore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import type { SnippetType } from "@/types/snippetType";
 import type { FolderType } from "@/types/folderType";
 import SnippetCard from "./SnippetCard";
-
-const folders = [
-  { id: 1, title: "JavaScript", isOpen: false, fileCount: 2 },
-  { id: 2, title: "TypeScript", isOpen: false, fileCount: 3 },
-  { id: 3, title: "React", isOpen: false, fileCount: 8 },
-  { id: 4, title: "Next.js", isOpen: false, fileCount: 4 },
-  { id: 5, title: "Node.js", isOpen: false, fileCount: 3 },
-  { id: 6, title: "CSS", isOpen: false, fileCount: 1 },
-  { id: 7, title: "HTML", isOpen: false, fileCount: 1 },
-];
-const files = [
-  {
-    id: 1,
-    title: "index.html",
-    language: "js",
-    tags: ["React", "Javascript"],
-    parentFolder: "HTML",
-    createdOn: "5/12/2023 12:06 PM",
-  },
-  {
-    id: 2,
-    title: "style.css",
-    language: "css",
-    tags: ["Styling"],
-    parentFolder: "CSS",
-    createdOn: "8/7/2022 2:27 PM",
-  },
-  {
-    id: 3,
-    title: "Input.jsx",
-    language: "jsx",
-    tags: ["JavaScript", "React"],
-    parentFolder: "React",
-    createdOn: "31/1/2024 4:02 PM",
-  },
-  {
-    id: 4,
-    title: "Button.tsx",
-    language: "tsx",
-    tags: ["React", "TypeScript"],
-    parentFolder: "TypeScript",
-    createdOn: "13/3/2023 6:29 AM",
-  },
-  {
-    id: 5,
-    title: "utils.ts",
-    language: "ts",
-    tags: ["React", "TypeScript"],
-    parentFolder: "TypeScript",
-    createdOn: "24/9/2022 11:38 AM",
-  },
-  {
-    id: 1,
-    title: "index.html",
-    language: "js",
-    tags: ["React", "Javascript"],
-    parentFolder: "HTML",
-    createdOn: "5/12/2023 12:06 PM",
-  },
-  {
-    id: 2,
-    title: "style.css",
-    language: "css",
-    tags: ["Styling"],
-    parentFolder: "CSS",
-    createdOn: "8/7/2022 2:27 PM",
-  },
-];
+import UserDropdown from "./UserDropDown";
 
 export function AppSidebar() {
-  const { setNewFileDialog, setNewFolderDialog } = useAppStore();
+  const {
+    setNewFileDialog,
+    setNewFolderDialog,
+    setSideBarWidth,
+    sideBarWidth,
+  } = useAppStore();
   const { open } = useSidebar();
-  // const [folders, setFolders] = useState<FolderType[]>([]);
+  const [folders, setFolders] = useState<FolderType[]>([]);
   const [snippets, setSnippets] = useState<SnippetType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSnippetsLoading, setIsSnippetsLoading] = useState(false);
+  const [isFoldersLoading, setIsFoldersLoading] = useState(false);
+  const [isCalculatingSideBarWidth, setIsCalculatingSideBarWidth] =
+    useState(true);
 
+  const invisibleDivToFindSideBarWidth = useRef<HTMLDivElement>(null);
   const handleAddNewFolder = () => setNewFolderDialog(true);
   const handleAddNewFile = () => setNewFileDialog(true);
 
   const { getToken, isLoaded } = useAuth();
   const { user } = useUser();
 
-  const { loadedSnippets, setLoadedSnippets } = useAppStore();
+  const {
+    loadedSnippets,
+    setLoadedSnippets,
+    loadedFolders,
+    setLoadedFolders,
+    currentFolder,
+  } = useAppStore();
   // console.log("user.id =>", user?.id);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const getSnippets = async () => {
-      const token = await getToken();
-      try {
-        const options = {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        };
+  const getSnippets = async () => {
+    setIsSnippetsLoading(true);
+    const token = await getToken();
+    try {
+      const options = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
-        setIsLoading(true);
-        const response = await fetch("/api/snippets?limit=10", options);
+      setIsSnippetsLoading(true);
+      const response = await fetch("/api/snippets", options);
 
-        if (response.ok) {
-          const result = await response.json();
-          console.log("result =>", result);
-          setSnippets(result);
-          setLoadedSnippets(result);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.log("Error getting snippets", error);
-        setIsLoading(false);
+      if (response.ok) {
+        const result = await response.json();
+        // console.log("result =>", result);
+        setSnippets(result);
+        setLoadedSnippets(result);
+        setIsSnippetsLoading(false);
       }
-    };
+    } catch (error) {
+      console.log("Error getting snippets", error);
+      setIsSnippetsLoading(false);
+    }
+  };
+  const getFolders = async () => {
+    const token = await getToken();
+    try {
+      const options = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
+      setIsFoldersLoading(true);
+      const response = await fetch("/api/folders", options);
+
+      if (response.ok) {
+        const result = await response.json();
+        // console.log("result =>", result);
+        setFolders([...loadedFolders, ...result]);
+        setLoadedFolders([...loadedFolders, ...result]);
+      }
+      setIsFoldersLoading(false);
+    } catch (error) {
+      console.log("Error getting folders", error);
+      setIsFoldersLoading(false);
+    }
+  };
+
+  useEffect(() => {
     if (isLoaded && loadedSnippets.length == 0) {
       getSnippets();
     }
-  }, [user?.id]);
+
+    if (isLoaded && loadedFolders.length == 1) {
+      getFolders();
+    }
+
+    setFolders(loadedFolders);
+  }, [user?.id, loadedFolders]);
+
+  const currentFolderSnippets = useMemo(() => {
+    return currentFolder == "index"
+      ? loadedSnippets
+      : loadedSnippets.filter((snippet) => snippet.folderId == currentFolder);
+  }, [currentFolder, loadedSnippets]);
+
+  useEffect(() => {
+    setSnippets(currentFolderSnippets);
+    // setFolders(loadedFolders);
+  }, [currentFolder, loadedFolders, loadedSnippets]);
+
+  // This will find sidebar width from snippets's `invisibleDivToFindSideBarWidth` container
+
+  // I will keep showing loader until sideBarWidth is not set
+
+  useEffect(() => {
+    if (!isCalculatingSideBarWidth) return;
+    setIsCalculatingSideBarWidth(true);
+
+    if (!invisibleDivToFindSideBarWidth.current) return;
+
+    const widths = Array.from(
+      invisibleDivToFindSideBarWidth.current.children
+    ).map((child) => (child as HTMLElement).offsetWidth);
+
+    const maxWidth = Math.max(...widths, 500);
+
+    setSideBarWidth(maxWidth + 16);
+
+    setIsSnippetsLoading(false);
+    setIsCalculatingSideBarWidth(false);
+  }, [, isCalculatingSideBarWidth, snippets]);
 
   return (
     <Sidebar collapsible="icon">
@@ -174,13 +186,20 @@ export function AppSidebar() {
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
                   <ScrollArea className="flex flex-col max-h-[80vh] overflow-auto pr-3">
-                    {folders.map((folder) => (
-                      <FolderCard
-                        key={folder.id}
-                        name={folder.title}
-                        isOpen={folder.isOpen}
-                      />
-                    ))}
+                    {isFoldersLoading ? (
+                      <div className="flex flex-col items-center py-10 gap-4">
+                        <div className="size-6 border-2 rounded-full border-t-transparent border-white animate-spin"></div>
+                        <span>Loading Folders</span>
+                      </div>
+                    ) : (
+                      folders.map((folder) => (
+                        <FolderCard
+                          key={folder._id}
+                          id={folder._id}
+                          name={folder.name}
+                        />
+                      ))
+                    )}
                   </ScrollArea>
                 </SidebarGroupContent>
               </SidebarGroup>
@@ -205,17 +224,45 @@ export function AppSidebar() {
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
                   <ScrollArea className="grow flex flex-col max-h-[80vh] overflow-auto pr-4">
-                    {snippets.map((snippet) => (
-                      <SnippetCard
-                        key={snippet._id}
-                        _id={snippet._id}
-                        title={snippet.title}
-                        language={snippet.language}
-                        createdAt={snippet.createdAt}
-                        tags={snippet.tags}
-                        folderName={snippet.folderName}
-                      />
-                    ))}
+                    {isSnippetsLoading ? (
+                      <div className="flex flex-col items-center py-10 gap-4">
+                        <div className="size-6 border-2 rounded-full border-t-transparent border-white animate-spin"></div>
+                        <span>Loading Snippets</span>
+                      </div>
+                    ) : isCalculatingSideBarWidth ? (
+                      <div
+                        ref={invisibleDivToFindSideBarWidth}
+                        className="invisible absolute top-0 left-0"
+                      >
+                        {snippets.map((snippet) => (
+                          <SnippetCard
+                            key={snippet._id}
+                            _id={snippet._id}
+                            title={snippet.title}
+                            language={snippet.language}
+                            lastUpdateOn={snippet.createdAt}
+                            tags={snippet.tags}
+                            folderName={snippet.folderName}
+                          />
+                        ))}
+                      </div>
+                    ) : snippets.length == 0 ? (
+                      <div className="text-gray-500 text-center py-6">
+                        No snippets found
+                      </div>
+                    ) : (
+                      snippets.map((snippet) => (
+                        <SnippetCard
+                          key={String(snippet._id)}
+                          _id={snippet._id}
+                          title={snippet.title}
+                          language={snippet.language}
+                          lastUpdateOn={snippet.lastUpdatedOn}
+                          tags={snippet.tags}
+                          folderName={snippet.folderName}
+                        />
+                      ))
+                    )}
                   </ScrollArea>
                 </SidebarGroupContent>
               </SidebarGroup>

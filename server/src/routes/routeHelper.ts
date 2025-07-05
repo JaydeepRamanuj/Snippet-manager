@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 
-export function convertToMongoDBObjectId(id: string) {
+export function toObjectId(id: string) {
+  if (!ObjectId.isValid(id)) throw new Error("Invalid ObjectId");
   return new ObjectId(id);
 }

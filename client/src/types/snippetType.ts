@@ -17,10 +17,10 @@ export interface SnippetType {
   folderId?: string;
   title: string;
   language: Language;
-  tags?: string[];
+  tags: string[];
   code?: string; // Monaco outout
   note?: string; // TipTap output
   createdAt: string;
   lastUpdatedOn: string;
-  folderName?: string;
+  folderName: string;
 }

@@ -1,7 +1,7 @@
 import { useAppStore } from "@/store/appStore";
 import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
-import { useAuth } from "@clerk/clerk-react";
+import { Folder } from "lucide-react";
 
 function SnippetCard({
   title,
@@ -9,51 +9,42 @@ function SnippetCard({
   language,
   folderName,
   _id,
-  createdAt,
+  lastUpdateOn,
 }: {
   _id: string;
   title: string;
   tags?: string[];
   language: string;
   folderName?: string;
-  createdAt: string;
+  lastUpdateOn: string;
 }) {
-  const { getToken } = useAuth();
-  const { loadedSnippets, setCurrentSnippet } = useAppStore();
-  const getSnippet = async () => {
-    const token = await getToken();
-    try {
-      const options = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await fetch(`/api/snippets/${_id}`, options);
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log("result =>", result);
-        result && setCurrentSnippet(result);
-      }
-    } catch (error) {
-      console.log("Error getting snippets", error);
-    }
-  };
+  const {
+    loadedSnippets,
+    setCurrentSnippet,
+    currentSnippet,
+    addToRecentSnippets,
+  } = useAppStore();
 
   const handleClick = () => {
     if (loadedSnippets) {
-      setCurrentSnippet(_id);
-    } else {
-      // Call this if no snippet data is available
-      getSnippet();
+      if (currentSnippet._id === _id) return;
+      const newCurrentSnippet = loadedSnippets.find(
+        (snippet) => snippet._id === _id
+      );
+      if (newCurrentSnippet) {
+        setCurrentSnippet(newCurrentSnippet);
+        addToRecentSnippets(newCurrentSnippet._id);
+      }
     }
   };
 
   return (
     <Card
-      className="w-full border border-gray-400/30 rounded-lg  dark:hover:bg-white/5 hover:bg-black/5 py-2 px-3 cursor-pointer mb-2"
+      className={`w-full border border-gray-400/30 rounded-lg py-2 px-3 cursor-pointer mb-2 ${
+        currentSnippet._id === _id
+          ? "bg-blue-50  dark:bg-white/10"
+          : "hover:bg-black/5 dark:hover:bg-white/5"
+      }`}
       onClick={handleClick}
     >
       <CardContent className="p-0 flex flex-col gap-2 ">
@@ -76,8 +67,13 @@ function SnippetCard({
             ))}
         </div>
         <div className="flex justify-between text-xs flex-wrap text-gray-500/60  dark:text-gray-300/60 gap-2">
-          <span>{folderName && folderName}</span>
-          <span>{createdAt}</span>
+          {folderName && (
+            <span className="flex gap-2 items-center">
+              <Folder size={12} />
+              <span>{folderName}</span>
+            </span>
+          )}
+          <span>{lastUpdateOn}</span>
         </div>
       </CardContent>
     </Card>

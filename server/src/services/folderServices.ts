@@ -23,20 +23,25 @@ type GetFolderDetailsArgs = {
   type: "all" | "specific";
   userId: string;
   id?: ObjectId;
+  limit?: number;
 };
 
 export async function getFolderDetails({
   type,
   userId,
   id,
-}: GetFolderDetailsArgs): Promise<FolderType | null | false> {
+  limit = 0,
+}: GetFolderDetailsArgs): Promise<FolderType[] | false> {
   try {
     const folderCollection: Collection<FolderType> = getCollection("folders");
-    const folders = await folderCollection.findOne(
-      type == "specific" ? { _id: id, userId: userId } : { userId: userId }
-    );
-    if (folders) {
-      return folders;
+    const folderCursor = await folderCollection
+      .find(
+        type == "specific" ? { _id: id, userId: userId } : { userId: userId }
+      )
+      .limit(limit);
+    if (folderCursor) {
+      const folderArray = await folderCursor.toArray();
+      return folderArray;
     } else {
       return false;
     }

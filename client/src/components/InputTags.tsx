@@ -39,7 +39,7 @@ export function InputTags({
         </Badge>
       ))}
       <Input
-        className="border-none p-0 h-6 w-auto flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-2"
+        className="border-none p-0 h-6 w-auto flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-2 rounded-xs"
         placeholder="Add tag..."
         value={value}
         onChange={(e) => setValue(e.target.value)}

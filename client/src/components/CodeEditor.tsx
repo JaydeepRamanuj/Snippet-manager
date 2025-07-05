@@ -1,59 +1,40 @@
-import { useHotkey } from "@/hooks/useHotKeys";
 import { useTheme } from "@/providers/themeProvider";
-import { useAppStore } from "@/store/appStore";
 import type { SnippetType } from "@/types/snippetType";
 import Editor from "@monaco-editor/react";
-
-import { useEffect } from "react";
-
+import { useEffect, useRef } from "react";
 type CodeEditorProps = {
   snippet: SnippetType;
-  handleCodeUpdate: (value: string) => void;
+  // handleCodeUpdate: <K extends keyof SnippetType>(
+  //   property: K,
+  //   value: SnippetType[K]
+  // ) => void;
+  onChange: (value: string) => void;
 };
 
-function CodeEditor({ snippet, handleCodeUpdate }: CodeEditorProps) {
-  // const {
-  //   currentSnippet,
-  //   loadedSnippets,
-  //   currentSnippetCode,
-  //   setCurrentSnippetCode,
-  //   currentSnippetLanguage,
-  //   setCurrentSnippetLanguage,
-  // } = useAppStore();
-  // let snippetCode = "// Namaste World 🙏";
-  // let snippetLanguage = "javascript";
-
-  // useEffect(() => {
-  //   if (typeof currentSnippet === "string") {
-  //     const snippet = loadedSnippets.find(
-  //       (snippet) => snippet._id == currentSnippet
-  //     );
-  //     snippetCode = snippet?.code || "// Namaste World 🙏";
-  //     snippetLanguage = snippet?.language || "javascript";
-  //   } else {
-  //     snippetCode = currentSnippet.code || "// Namaste World 🙏";
-  //   }
-
-  //   setCurrentSnippetCode(snippetCode);
-  //   setCurrentSnippetLanguage(snippetLanguage);
-  // }, [currentSnippet]);
-
+function CodeEditor({ snippet, onChange }: CodeEditorProps) {
   const handleEditorChange = (updatedCode: string | undefined) => {
     if (!updatedCode) return;
-    handleCodeUpdate(updatedCode);
+    // handleCodeUpdate("code", editorRef.current.getValue());
+    onChange(updatedCode);
   };
 
+  const editorRef = useRef(null);
+
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
+  }
+
   const context = useTheme();
-  useHotkey("Ctrl+s", () => console.log("Save snippet"));
 
   return (
     <div className="p-3 h-full rounded-lg shadow-lg bg-accent">
       <Editor
         defaultLanguage="javascript"
         language={snippet.language}
-        value={snippet.code}
         defaultValue="// Namaste World 🙏"
+        onMount={handleEditorDidMount}
         onChange={handleEditorChange}
+        value={snippet.code}
         theme={context.theme == "dark" ? "vs-dark" : "light"}
         options={{
           // readOnly: true,

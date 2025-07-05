@@ -1,18 +1,22 @@
-import { useEffect, useState } from "react";
 import { SimpleEditor } from "./tiptap-templates/simple/simple-editor";
-import { useAppStore } from "@/store/appStore";
 import type { SnippetType } from "@/types/snippetType";
 
 type NoteEditorProps = {
   snippet: SnippetType;
   isLoading: boolean;
-  handleNoteChange: (value: string) => void;
+  // handleNoteChange: <K extends keyof SnippetType>(
+  //   property: K,
+  //   value: SnippetType[K]
+  // ) => void;
+
+  onChange: (value: string) => void;
 };
 
-function NoteEditor({ snippet, isLoading, handleNoteChange }: NoteEditorProps) {
+function NoteEditor({ snippet, isLoading, onChange }: NoteEditorProps) {
   const handleChange = (value: string | object) => {
     if (typeof value === "string") {
-      handleNoteChange(value);
+      // handleNoteChange("note", value);
+      onChange(value);
     }
   };
   return (

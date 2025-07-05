@@ -1,12 +1,12 @@
 import AuthDialog from "./auth/AuthDialog";
 import CustomAlertDialog from "./CustomAlertDialog";
-import { NewFileDialog } from "./NewFileDialog";
+import { NewSnippetDialog } from "./NewSnippetDialog";
 import { NewFolderDialog } from "./NewFolderDialog";
 
 function Dialogs() {
   return (
     <div>
-      <NewFileDialog onCreate={() => {}} />
+      <NewSnippetDialog onCreate={() => {}} />
       <NewFolderDialog onCreate={() => {}} />
       <AuthDialog />
       <CustomAlertDialog />

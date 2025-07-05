@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,25 +8,24 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { InputTags } from "./InputTags";
 import { useAppStore } from "@/store/appStore";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import type { SnippetType } from "@/types/snippetType";
-import { formatDateToIndianStyle, isLanguage } from "@/lib/utils";
+import {
+  allowedLanguages,
+  capitalize,
+  formatDateToIndianStyle,
+  isLanguage,
+} from "@/lib/utils";
 import { toast } from "sonner";
+import { CustomDropDown } from "./common/customDropDown";
 
-export function NewFileDialog() {
-  const { showNewFileDialog, setNewFileDialog } = useAppStore();
+export function NewSnippetDialog() {
+  const { showNewFileDialog, setNewFileDialog, loadedFolders } = useAppStore();
   const [title, setTitle] = useState("");
-  const [parent, setParent] = useState("");
+  const [folder, setFolder] = useState("");
   const [language, setLanguage] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [error, setError] = useState("");
@@ -34,7 +33,8 @@ export function NewFileDialog() {
   const { getToken } = useAuth();
   const { user } = useUser();
 
-  const { setCurrentSnippet } = useAppStore();
+  const { setCurrentSnippet, loadedSnippets, setLoadedSnippets } =
+    useAppStore();
   const createNewSnippet = async () => {
     const token = await getToken();
 
@@ -42,17 +42,26 @@ export function NewFileDialog() {
       toast.warning("Please login to add new snippets.");
       return;
     }
+
+    const existingFolder = loadedFolders.find((f) => f.name === folder);
+
+    console.log("existingFolder =>", existingFolder);
+    console.log("folder =>", folder);
     const newSnippet: Omit<SnippetType, "_id"> = {
       createdAt: formatDateToIndianStyle(),
       language: isLanguage(language) ? language : "javascript",
       lastUpdatedOn: formatDateToIndianStyle(),
       title: title,
-      folderId: parent,
+      ...(existingFolder &&
+        folder != "Index" && { folderId: existingFolder._id }),
+      folderName: folder || "index",
       code: "// Namaste World 🙏",
       note: "Write your comments here...",
       tags: tags,
       userId: user?.id,
     };
+
+    console.log("newSnippet =>", newSnippet);
     try {
       const options = {
         method: "POST",
@@ -69,8 +78,12 @@ export function NewFileDialog() {
         response && toast.success("Snippet created");
         const result = await response.json();
 
-        // console.log("result =>", result);
-        setCurrentSnippet(result.data);
+        console.log("result =>", result);
+        setCurrentSnippet({ _id: result.data, ...newSnippet });
+        setLoadedSnippets([
+          ...loadedSnippets,
+          { ...newSnippet, _id: result.data },
+        ]);
       }
     } catch (error) {
       console.log("Error creating snippet", error);
@@ -80,18 +93,43 @@ export function NewFileDialog() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !parent || !language) {
+    if (!title || !language) {
       setError("Please fill all required fields.");
       return;
     }
     createNewSnippet();
     setTitle("");
-    setParent("");
+    setFolder("");
     setLanguage("");
     setTags([]);
     setError("");
     setNewFileDialog(false);
   };
+
+  const folderOptions = useMemo(() => {
+    return loadedFolders.map((folder) => ({
+      label: capitalize(folder.name),
+      value: folder.name,
+      id: folder._id,
+    }));
+  }, [loadedFolders]);
+
+  const languageOptions = useMemo(() => {
+    return allowedLanguages.map((language) => ({
+      label: capitalize(language),
+      value: language,
+    }));
+  }, [allowedLanguages]);
+
+  useEffect(() => {
+    return () => {
+      setTitle("");
+      setFolder("");
+      setLanguage("");
+      setTags([]);
+      setError("");
+    };
+  }, [showNewFileDialog]);
 
   return (
     <Dialog open={showNewFileDialog} onOpenChange={setNewFileDialog}>
@@ -112,44 +150,40 @@ export function NewFileDialog() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <Label htmlFor="parent">Parent Folder</Label>
             <Input
               id="parent"
               required
-              value={parent}
-              onChange={(e) => setParent(e.target.value)}
+              value={folder}
+              onChange={(e) => setFolder(e.target.value)}
               placeholder="e.g. hooks"
               className="mt-2"
             />
-          </div>
+          </div> */}
+
+          {/* <FolderDropDown
+            value={folder}
+            onUpdate={(value: string) => setFolder(value)}
+          /> */}
 
           <div>
-            <Label htmlFor="language">Language</Label>
-            <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger id="language" className="mt-2">
-                <SelectValue placeholder="Select language" />
-              </SelectTrigger>
-              <SelectContent>
-                {[
-                  "javascript",
-                  "typescript",
-                  "html",
-                  "css",
-                  "python",
-                  "cpp",
-                  "java",
-                  "go",
-                  "json",
-                  "bash",
-                  "other",
-                ].map((lang) => (
-                  <SelectItem key={lang} value={lang}>
-                    {lang}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label className="mb-3">Folder</Label>
+            <CustomDropDown
+              items={folderOptions}
+              selected={folder}
+              title="folder"
+              onSelected={(value: string) => setFolder(value)}
+            />
+          </div>
+          <div>
+            <Label className="mb-3">Language</Label>
+            <CustomDropDown
+              items={languageOptions}
+              selected={language}
+              title="language"
+              onSelected={(value: string) => setLanguage(value)}
+            />
           </div>
 
           <div>

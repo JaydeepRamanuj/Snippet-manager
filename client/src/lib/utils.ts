@@ -17,7 +17,7 @@ export function formatDateToIndianStyle(date = new Date()) {
   return `${dd}/${mm}/${yyyy} ${hh}:${min}`;
 }
 
-const allowedLanguages: Language[] = [
+export const allowedLanguages: Language[] = [
   "javascript",
   "typescript",
   "html",
@@ -33,4 +33,8 @@ const allowedLanguages: Language[] = [
 
 export function isLanguage(value: string): value is Language {
   return allowedLanguages.includes(value as Language);
+}
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

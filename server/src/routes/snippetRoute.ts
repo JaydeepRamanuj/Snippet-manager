@@ -7,8 +7,9 @@ import {
   updateSnippet,
 } from "../services/snippetServices";
 import { ObjectId } from "mongodb";
-import { convertToMongoDBObjectId } from "./routeHelper";
+import { toObjectId } from "./routeHelper";
 import { requireAuth } from "../middlewares/requireAuth";
+import { SnippetType } from "../types/SnippetType";
 
 const router = express.Router();
 
@@ -59,10 +60,7 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
 
     const userId = (req as any).userId;
 
-    const snippet = await getSingleSnippet(
-      convertToMongoDBObjectId(id),
-      userId
-    );
+    const snippet = await getSingleSnippet(toObjectId(id), userId);
     if (snippet) {
       res.status(200).json(snippet);
     } else {
@@ -76,7 +74,7 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
 
 // Create snippet for authenticated user
 // router.post("/snippet", requireAuth, async (req: Request, res: Response) => {
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", requireAuth, async (req: Request, res: Response) => {
   try {
     const newSnippet = req.body;
 
@@ -88,7 +86,13 @@ router.post("/", async (req: Request, res: Response) => {
       return res.status(400).send("Missing required fields.");
     }
 
-    const createResponse = await createSnippet(newSnippet);
+    const createResponse = await createSnippet({
+      ...newSnippet,
+      ...(newSnippet.folderId
+        ? { folderId: toObjectId(newSnippet.folderId) }
+        : {}),
+      userId: newSnippet.userId,
+    });
 
     if (createResponse) {
       // status 201 => created
@@ -105,19 +109,34 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Update snippet details for authenticated user
-router.patch("/:id", async (req: Request, res: Response) => {
+router.put("/:id", requireAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const snippetPart = req.body;
+    const payload = req.body;
+
+    const { _id, ...snippetPart } = payload;
+    console.log("snippetPart =>", snippetPart);
+
     if (!snippetPart) return res.status(400).send("Bad Request.");
 
     const userId = (req as any).userId;
 
-    const updateResponse = await updateSnippet(
-      convertToMongoDBObjectId(id),
-      userId,
-      snippetPart
-    );
+    console.log(userId);
+
+    const updateResponse = await updateSnippet(toObjectId(id), userId, {
+      ...snippetPart,
+      ...(snippetPart.folderId
+        ? { folderId: toObjectId(snippetPart.folderId) }
+        : {}),
+      // userId: snippetPart.userId,
+      lastUpdatedOn: new Date().toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    });
     if (updateResponse) {
       res.status(200).send("Snippet updated");
     } else {
@@ -136,10 +155,7 @@ router.delete("/:id", requireAuth, async (req: Request, res: Response) => {
 
     const userId = (req as any).userId;
 
-    const deleteResponse = await deleteSnippet(
-      convertToMongoDBObjectId(id),
-      userId
-    );
+    const deleteResponse = await deleteSnippet(toObjectId(id), userId);
     if (deleteResponse) {
       res.status(200).send("Snippet deleted");
     } else {

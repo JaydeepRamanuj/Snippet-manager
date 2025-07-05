@@ -6,7 +6,7 @@ import {
   getUserDetail,
   updateUser,
 } from "../services/userServices";
-import { convertToMongoDBObjectId } from "./routeHelper";
+import { toObjectId } from "./routeHelper";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.get("/:id", requireAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
-    const user = await getUserDetail(convertToMongoDBObjectId(id));
+    const user = await getUserDetail(toObjectId(id));
 
     if (user) {
       res.status(201).json(user);
@@ -62,10 +62,7 @@ router.patch("/:id", requireAuth, async (req: Request, res: Response) => {
 
     if (id !== userId) return res.status(401).json({ message: "Unauthorized" });
 
-    const updateResponse = await updateUser(
-      convertToMongoDBObjectId(id),
-      userPart
-    );
+    const updateResponse = await updateUser(toObjectId(id), userPart);
     if (updateResponse) {
       res.status(200).send("User updated");
     } else {
@@ -83,7 +80,7 @@ router.delete("/:id", requireAuth, async (req: Request, res: Response) => {
 
   const { id } = req.params;
   if (id !== userId) return res.status(401).json({ message: "Unauthorized" });
-  const deleteResponse = await deleteUser(convertToMongoDBObjectId(id));
+  const deleteResponse = await deleteUser(toObjectId(id));
   if (deleteResponse) {
     res.status(200).send("User Deleted");
   } else {
