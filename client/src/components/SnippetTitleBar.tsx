@@ -90,7 +90,9 @@ export default function SnippetTitleBar({
     setTagInpVal("");
   };
 
-  const handleTagClick = (value: string) => {};
+  const handleTagClick = (value: string) => {
+    console.log(value);
+  };
 
   const handleTagRemove = async (value: string) => {
     const response = await showAlertWithPromise({

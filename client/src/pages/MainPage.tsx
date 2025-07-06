@@ -4,11 +4,10 @@ import NoteEditor from "@/components/NoteEditor";
 import { useAppStore } from "@/store/appStore";
 import type { SnippetType } from "@/types/snippetType";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { CircleCheckBig, GripHorizontal } from "lucide-react";
+import { GripHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { useHotkey } from "@/hooks/useHotKeys";
-import { toast } from "sonner";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import showToast from "@/components/common/Toast";
 
@@ -213,7 +212,7 @@ function MainPage() {
   });
 
   // console.log("currentSnippet =>", currentSnippet);
-  const handleTagSearch = () => {};
+  // const handleTagSearch = () => {};
 
   return (
     <div className="h-full flex flex-col">

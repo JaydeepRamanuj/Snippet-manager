@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useSignUp } from "@clerk/clerk-react";
 import OTPInput from "./OTPInput";
 import { useAppStore } from "@/store/appStore";
-import { toast } from "sonner";
 import showToast from "../common/Toast";
 
 function SignupForm({

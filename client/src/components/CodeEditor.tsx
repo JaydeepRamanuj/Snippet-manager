@@ -1,7 +1,7 @@
 import { useTheme } from "@/providers/themeProvider";
 import type { SnippetType } from "@/types/snippetType";
 import Editor from "@monaco-editor/react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 type CodeEditorProps = {
   snippet: SnippetType;
   // handleCodeUpdate: <K extends keyof SnippetType>(
@@ -19,7 +19,7 @@ function CodeEditor({ snippet, onChange }: CodeEditorProps) {
   };
 
   const editorRef = useRef(null);
-
+  // @ts-ignore
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
   }

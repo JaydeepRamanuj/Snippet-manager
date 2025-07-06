@@ -6,7 +6,7 @@ function AccountTab() {
   const { signOut } = useClerk();
   const { user } = useUser();
 
-  const handleChangePassword = () => {};
+  // const handleChangePassword = () => {};
 
   const handleLogout = () => {
     const signOutPromise = signOut();

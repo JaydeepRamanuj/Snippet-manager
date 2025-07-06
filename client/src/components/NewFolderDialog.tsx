@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppStore } from "@/store/appStore";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { toast } from "sonner";
 import type { FolderType } from "@/types/folderType";
 import showToast from "./common/Toast";
 
