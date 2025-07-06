@@ -8,7 +8,7 @@ import userRouter from "./routes/userRoute";
 
 const app = express();
 const PORT = process.env.PORT || "3000";
-
+const origin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     // client origin
-    origin: "http://localhost:5173",
+    origin: origin,
 
     // // For clerk
     // credentials: true,
@@ -35,17 +35,10 @@ app.use("/api/folders", folderRouter);
 app.use("/api/users", userRouter);
 
 // Handling errors
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    console.error(err.stack);
-    res.status(500).send("Something went wrong!");
-  }
-);
+app.use((err: any, res: express.Response) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});
 
 async function startServer() {
   // Making sure database is connected before server starts listening
