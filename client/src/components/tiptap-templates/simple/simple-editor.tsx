@@ -250,6 +250,20 @@ export function SimpleEditor({
     },
   });
 
+  // Updating value manually because initially passes value don't get update unless we do it using editor.commands.setContent()
+
+  React.useEffect(() => {
+    if (editor && value) {
+      const current =
+        outputType === "json" ? editor.getJSON() : editor.getHTML();
+
+      // Only update if content actually changed (optional, prevents loops)
+      if (current !== value) {
+        editor.commands.setContent(value, false); // false = don't emit `onUpdate`
+      }
+    }
+  }, [value, editor]);
+
   const bodyRect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,

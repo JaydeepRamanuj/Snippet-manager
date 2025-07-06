@@ -1,17 +1,35 @@
-import { useState } from "react";
 import { SimpleEditor } from "./tiptap-templates/simple/simple-editor";
+import type { SnippetType } from "@/types/snippetType";
 
-function NoteEditor() {
-  const [value, setValue] = useState("<p>Write your comments here...</p>");
+type NoteEditorProps = {
+  snippet: SnippetType;
+  isLoading: boolean;
+  // handleNoteChange: <K extends keyof SnippetType>(
+  //   property: K,
+  //   value: SnippetType[K]
+  // ) => void;
 
-  // console.log("value =>", value);
+  onChange: (value: string) => void;
+};
+
+function NoteEditor({ snippet, isLoading, onChange }: NoteEditorProps) {
+  const handleChange = (value: string | object) => {
+    if (typeof value === "string") {
+      // handleNoteChange("note", value);
+      onChange(value);
+    }
+  };
   return (
     <div className="h-full">
       <SimpleEditor
-        value={value}
-        onChange={(value) => {
-          typeof value === "string" && setValue(value);
-        }}
+        outputType="html"
+        isEditable={true}
+        value={
+          isLoading
+            ? "<p>Loading... Please wait.</p>"
+            : snippet.note || "<p>Write your comments here...</p>"
+        }
+        onChange={handleChange}
       />
     </div>
   );

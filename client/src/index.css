@@ -11,6 +11,7 @@
   --font-main: "Inter", sans-serif;
 }
 
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

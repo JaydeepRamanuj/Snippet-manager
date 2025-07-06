@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { useSignIn } from "@clerk/clerk-react";
 import { useAppStore } from "@/store/appStore";
-import { toast } from "sonner";
+import showToast from "../common/Toast";
 
 function LoginForm() {
   const { signIn, isLoaded, setActive } = useSignIn();
@@ -29,13 +29,14 @@ function LoginForm() {
       if (result.status == "complete") {
         await setActive({ session: result.createdSessionId });
         setAuthDialog(false);
-        toast.success("Sign in successful.");
+        showToast({ msg: "Sign in successful.", type: "success" });
       } else {
         console.log("Error signing in user", error);
+        showToast({ msg: "Error signing in. Try again", type: "error" });
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || "Login failed.");
-      toast.error("Error signing in. Try again");
+      showToast({ msg: "Error signing in. Try again", type: "error" });
     } finally {
       setLoading(false);
     }

@@ -1,26 +1,40 @@
-import { useHotkey } from "@/hooks/useHotKeys";
 import { useTheme } from "@/providers/themeProvider";
+import type { SnippetType } from "@/types/snippetType";
 import Editor from "@monaco-editor/react";
+import { useRef } from "react";
+type CodeEditorProps = {
+  snippet: SnippetType;
+  // handleCodeUpdate: <K extends keyof SnippetType>(
+  //   property: K,
+  //   value: SnippetType[K]
+  // ) => void;
+  onChange: (value: string) => void;
+};
 
-import { useState } from "react";
-
-function CodeEditor() {
-  const [code, setCode] = useState<string>("");
-
+function CodeEditor({ snippet, onChange }: CodeEditorProps) {
   const handleEditorChange = (updatedCode: string | undefined) => {
     if (!updatedCode) return;
-    console.log(updatedCode);
-    setCode(updatedCode);
+    // handleCodeUpdate("code", editorRef.current.getValue());
+    onChange(updatedCode);
   };
-  console.log(code);
+
+  const editorRef = useRef(null);
+  // @ts-ignore
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
+  }
+
   const context = useTheme();
-  useHotkey("Ctrl+s", () => console.log("Save snippet"));
+
   return (
     <div className="p-3 h-full rounded-lg shadow-lg bg-accent">
       <Editor
         defaultLanguage="javascript"
-        defaultValue="// Namaste World"
+        language={snippet.language}
+        defaultValue="// Namaste World 🙏"
+        onMount={handleEditorDidMount}
         onChange={handleEditorChange}
+        value={snippet.code}
         theme={context.theme == "dark" ? "vs-dark" : "light"}
         options={{
           // readOnly: true,
