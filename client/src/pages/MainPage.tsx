@@ -27,6 +27,8 @@ function MainPage() {
   const [note, setNote] = useState<string>();
   const { user } = useUser();
 
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchSnippets = async () => {
       setIsLoading(true);
@@ -41,7 +43,7 @@ function MainPage() {
 
         setIsLoading(true);
         const response = await fetch(
-          `/api/snippets/${currentSnippet._id}`,
+          `${backendURL}/api/snippets/${currentSnippet._id}`,
           options
         );
 
@@ -145,13 +147,13 @@ function MainPage() {
         body: JSON.stringify(newSnippet),
       };
 
-      const response = await fetch("/api/snippets/", options);
+      const response = await fetch(`${backendURL}/api/snippets/`, options);
 
       if (response.ok) {
         const result = await response.json();
         result.data && showToast({ msg: "Snippet created", type: "success" });
 
-        console.log("result =>", result);
+        // console.log("result =>", result);
         setLoadedSnippets([
           ...loadedSnippets,
           { ...newSnippet, _id: result.data },
@@ -181,7 +183,7 @@ function MainPage() {
       };
       console.log("currentSnippet._id =>", currentSnippet._id);
       const response = await fetch(
-        `/api/snippets/${currentSnippet._id}`,
+        `${backendURL}/api/snippets/${currentSnippet._id}`,
         options
       );
 

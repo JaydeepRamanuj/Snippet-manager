@@ -33,6 +33,8 @@ export function NewSnippetDialog() {
   const { getToken } = useAuth();
   const { user } = useUser();
 
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
   const { setCurrentSnippet, loadedSnippets, setLoadedSnippets } =
     useAppStore();
   const createNewSnippet = async () => {
@@ -72,7 +74,7 @@ export function NewSnippetDialog() {
         body: JSON.stringify(newSnippet),
       };
 
-      const response = await fetch("/api/snippets/", options);
+      const response = await fetch(`${backendURL}/api/snippets/`, options);
 
       if (response.ok) {
         response && showToast({ msg: "Snippet created", type: "success" });

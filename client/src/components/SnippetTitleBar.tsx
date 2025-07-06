@@ -45,6 +45,8 @@ export default function SnippetTitleBar({
     useAppStore();
   const [isSaveBadgeHover, setSaveBadgeHover] = useState<boolean>(false);
 
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
   const deleteSnippet = async () => {
     try {
       const token = await getToken();
@@ -57,7 +59,10 @@ export default function SnippetTitleBar({
         },
       };
 
-      const response = await fetch(`/api/snippets/${snippet._id}`, options);
+      const response = await fetch(
+        `${backendURL}/api/snippets/${snippet._id}`,
+        options
+      );
 
       if (response.ok) {
         showToast({ msg: "Snippet deleted", type: "success" });

@@ -45,6 +45,8 @@ export function AppSidebar() {
   const { getToken, isLoaded } = useAuth();
   const { user } = useUser();
 
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
   const {
     loadedSnippets,
     setLoadedSnippets,
@@ -66,7 +68,7 @@ export function AppSidebar() {
       };
 
       setIsSnippetsLoading(true);
-      const response = await fetch("/api/snippets", options);
+      const response = await fetch(`${backendURL}/api/snippets`, options);
 
       if (response.ok) {
         const result = await response.json();
@@ -92,7 +94,7 @@ export function AppSidebar() {
       };
 
       setIsFoldersLoading(true);
-      const response = await fetch("/api/folders", options);
+      const response = await fetch(`${backendURL}/api/folders`, options);
 
       if (response.ok) {
         const result = await response.json();

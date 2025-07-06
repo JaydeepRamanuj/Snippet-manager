@@ -23,6 +23,7 @@ function FolderCard({ id, name }: { id: string; name: string }) {
     useAppStore();
   const { getToken } = useAuth();
 
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { showAlertWithPromise } = useAlert();
   useEffect(() => {
     setTimeout(() => {
@@ -52,7 +53,10 @@ function FolderCard({ id, name }: { id: string; name: string }) {
           },
         };
 
-        const response = await fetch(`/api/folders/${id}`, options);
+        const response = await fetch(
+          `${backendURL}/api/folders/${id}`,
+          options
+        );
 
         if (response.ok) {
           showToast({ msg: "Folder deleted", type: "success" });

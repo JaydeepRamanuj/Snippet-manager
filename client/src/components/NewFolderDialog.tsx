@@ -24,6 +24,7 @@ export function NewFolderDialog() {
 
   const { loadedFolders, setLoadedFolders } = useAppStore();
 
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
   const createNewFolder = async () => {
     folderName.trim();
     const token = await getToken();
@@ -48,7 +49,7 @@ export function NewFolderDialog() {
         body: JSON.stringify(newFolder),
       };
 
-      const response = await fetch("/api/folders/", options);
+      const response = await fetch(`${backendURL}/api/folders/`, options);
 
       if (response.ok) {
         const result = await response.json();
