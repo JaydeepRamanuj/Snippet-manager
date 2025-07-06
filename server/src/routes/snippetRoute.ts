@@ -33,9 +33,7 @@ router.get("/", requireAuth, async (req: Request, res: Response) => {
 
     const userId = (req as any).userId;
     const { limit } = (req as Request).query;
-    console.log("userId =>", userId);
-
-    console.log(limit);
+    // console.log("userId =>", userId);
 
     const snippets = await getSnippets({
       type: "all",
@@ -78,7 +76,7 @@ router.post("/", requireAuth, async (req: Request, res: Response) => {
   try {
     const newSnippet = req.body;
 
-    console.log("newSnippet =>", newSnippet);
+    // console.log("newSnippet =>", newSnippet);
 
     if (!newSnippet) return res.status(400).send("Bad Request.");
 

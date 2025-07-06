@@ -15,6 +15,7 @@ interface AppState {
   showNewFileDialog: boolean;
   showAuthDialog: boolean;
   showSearchDialog: boolean;
+  showSettingsDialog: boolean;
   alertDialogMessage: string;
   currentSnippet: SnippetType;
   currentFolder: string;
@@ -42,6 +43,7 @@ interface AppState {
   setLoadedFolders: (folders: FolderType[]) => void;
   setSideBarWidth: (value: number) => void;
   addToRecentSnippets: (value: string) => void;
+  setSettingsDialog: (value: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -53,6 +55,7 @@ export const useAppStore = create<AppState>((set) => ({
   showNewFileDialog: false,
   showAuthDialog: false,
   showSearchDialog: false,
+  showSettingsDialog: false,
   sortType: "recency",
   filteringTags: [],
   alertDialogMessage: "",
@@ -64,7 +67,7 @@ export const useAppStore = create<AppState>((set) => ({
     title: "Untitled",
     userId: "",
     code: "// Namaste World 🙏",
-    folderName: "",
+    folderName: "Index",
     note: "<p>Write your comments here...</p>",
     tags: [],
   },
@@ -91,12 +94,13 @@ export const useAppStore = create<AppState>((set) => ({
   setNewFolderDialog: (value) => set({ showNewFolderDialog: value }),
   setNewFileDialog: (value) => set({ showNewFileDialog: value }),
   setAuthDialog: (value) => set({ showAuthDialog: value }),
+  setSettingsDialog: (value) => set({ showSettingsDialog: value }),
   setAlertDialogMessage: (str) => set({ alertDialogMessage: str }),
   setCurrentSnippet: (snippet) => set({ currentSnippet: snippet }),
   setCurrentFolder: (folderId) => set({ currentFolder: folderId }),
   setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
   setLoadedFolders: (folders) => set({ loadedFolders: folders }),
-  setSideBarWidth: (value: number) => set({ sideBarWidth: value }),
+  setSideBarWidth: (value) => set({ sideBarWidth: value }),
   addTag: (tag) =>
     set((state) => ({
       filteringTags: [...new Set([...state.filteringTags, tag])],

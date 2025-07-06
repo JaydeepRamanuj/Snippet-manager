@@ -14,11 +14,16 @@ export const unregisterHotkey = (key: string) => {
 
 // This will handle keyboard event by getting function mapped to that specific hotKey
 export const handleGlobalKeydown = (e: KeyboardEvent) => {
+  // console.log(hotkeyMap);
+  // console.log(e);
+
   let key = "";
   if (e.ctrlKey && e.shiftKey) {
     key = `Ctrl+Shift+${e.key.toLowerCase()}`;
   } else if (e.ctrlKey && !e.shiftKey) {
     key = `Ctrl+${e.key.toLowerCase()}`;
+  } else if (e.altKey) {
+    key = `Alt+${e.key.toLowerCase()}`;
   } else {
     key = "";
   }

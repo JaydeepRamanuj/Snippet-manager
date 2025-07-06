@@ -1,6 +1,4 @@
-"use client";
-
-import { use, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,6 +14,7 @@ import { useAppStore } from "@/store/appStore";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
 import type { FolderType } from "@/types/folderType";
+import showToast from "./common/Toast";
 
 export function NewFolderDialog() {
   const { showNewFolderDialog, setNewFolderDialog } = useAppStore();
@@ -31,7 +30,8 @@ export function NewFolderDialog() {
     const token = await getToken();
 
     if (!user?.id) {
-      toast.warning("Please login to add new snippets.");
+      showToast({ msg: "Please login to add new Folders.", type: "info" });
+
       return;
     }
 
@@ -53,9 +53,7 @@ export function NewFolderDialog() {
 
       if (response.ok) {
         const result = await response.json();
-        result && toast.success("Folder created");
-
-        // console.log("result =>", result);
+        result && showToast({ msg: "Folder created", type: "success" });
 
         setLoadedFolders([
           ...loadedFolders,
@@ -64,6 +62,7 @@ export function NewFolderDialog() {
       }
     } catch (error) {
       console.error("Error creating folder", error);
+      showToast({ msg: "Error creating folder", type: "error" });
     }
   };
 

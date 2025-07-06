@@ -100,6 +100,7 @@ router.delete("/:id", requireAuth, async (req: Request, res: Response) => {
     id: toObjectId(id),
     userId,
   });
+
   if (deleteResponse) {
     res.status(200).send("Folder Deleted");
   } else {

@@ -6,8 +6,8 @@ import { NewFolderDialog } from "./NewFolderDialog";
 function Dialogs() {
   return (
     <div>
-      <NewSnippetDialog onCreate={() => {}} />
-      <NewFolderDialog onCreate={() => {}} />
+      <NewSnippetDialog />
+      <NewFolderDialog />
       <AuthDialog />
       <CustomAlertDialog />
     </div>

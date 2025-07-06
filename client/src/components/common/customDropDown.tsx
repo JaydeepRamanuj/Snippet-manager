@@ -38,7 +38,8 @@ export function CustomDropDown({
   variant = "md",
 }: CustomDropDownProps) {
   const [open, setOpen] = useState(false);
-
+  // console.log("selected =>", selected);
+  // console.log("items =>", items);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

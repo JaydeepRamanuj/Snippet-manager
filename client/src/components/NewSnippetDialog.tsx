@@ -21,6 +21,7 @@ import {
 } from "@/lib/utils";
 import { toast } from "sonner";
 import { CustomDropDown } from "./common/customDropDown";
+import showToast from "./common/Toast";
 
 export function NewSnippetDialog() {
   const { showNewFileDialog, setNewFileDialog, loadedFolders } = useAppStore();
@@ -39,7 +40,7 @@ export function NewSnippetDialog() {
     const token = await getToken();
 
     if (!user?.id) {
-      toast.warning("Please login to add new snippets.");
+      showToast({ msg: "Please login to add new Snippets.", type: "info" });
       return;
     }
 
@@ -54,7 +55,7 @@ export function NewSnippetDialog() {
       title: title,
       ...(existingFolder &&
         folder != "Index" && { folderId: existingFolder._id }),
-      folderName: folder || "index",
+      folderName: folder || "Index",
       code: "// Namaste World 🙏",
       note: "Write your comments here...",
       tags: tags,
@@ -75,7 +76,7 @@ export function NewSnippetDialog() {
       const response = await fetch("/api/snippets/", options);
 
       if (response.ok) {
-        response && toast.success("Snippet created");
+        response && showToast({ msg: "Snippet created", type: "success" });
         const result = await response.json();
 
         console.log("result =>", result);
@@ -87,7 +88,7 @@ export function NewSnippetDialog() {
       }
     } catch (error) {
       console.log("Error creating snippet", error);
-      toast.error("Error creating snippet");
+      showToast({ msg: "Error creating snippet", type: "error" });
     }
   };
 

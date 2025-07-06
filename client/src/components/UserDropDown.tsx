@@ -12,9 +12,10 @@ import { useClerk, useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
 
 function UserDropdown() {
-  const { setAuthDialog } = useAppStore();
+  const { setAuthDialog, setSettingsDialog } = useAppStore();
   const { signOut } = useClerk();
   const { isSignedIn, user } = useUser();
+
   const handleSignOut = () => {
     const signOutPromise = signOut();
     toast.promise(signOutPromise, {
@@ -35,11 +36,11 @@ function UserDropdown() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem onClick={() => console.log("Profile")}>
+        <DropdownMenuItem onClick={() => setSettingsDialog(true)}>
           <User className="w-4 h-4 mr-2" />
           Profile
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => console.log("Settings")}>
+        <DropdownMenuItem onClick={() => setSettingsDialog(true)}>
           <Settings className="w-4 h-4 mr-2" />
           Settings
         </DropdownMenuItem>

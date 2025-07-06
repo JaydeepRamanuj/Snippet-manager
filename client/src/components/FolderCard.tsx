@@ -11,13 +11,17 @@ import {
 import { useEffect, useRef, useState } from "react";
 import useAlert from "@/providers/AlertProvider";
 import { useAppStore } from "@/store/appStore";
+import { useAuth } from "@clerk/clerk-react";
+import showToast from "./common/Toast";
 
 function FolderCard({ id, name }: { id: string; name: string }) {
   const { open } = useSidebar();
   const [inpVal, setInpVal] = useState(name);
   const [renaming, setRenaming] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { currentFolder, setCurrentFolder } = useAppStore();
+  const { currentFolder, setCurrentFolder, loadedFolders, setLoadedFolders } =
+    useAppStore();
+  const { getToken } = useAuth();
 
   const { showAlertWithPromise } = useAlert();
   useEffect(() => {
@@ -36,11 +40,46 @@ function FolderCard({ id, name }: { id: string; name: string }) {
       truthyButton: "Delete",
     });
 
-    console.log(response);
+    if (response) {
+      try {
+        const token = await getToken();
+
+        const options = {
+          method: "Delete",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await fetch(`/api/folders/${id}`, options);
+
+        if (response.ok) {
+          showToast({ msg: "Folder deleted", type: "success" });
+
+          setLoadedFolders(loadedFolders.filter((folder) => folder._id !== id));
+        } else {
+          showToast({
+            msg: "Error deleting folder, Try again.",
+            type: "error",
+          });
+        }
+      } catch (error) {
+        console.log("Error deleting folder, Try again", error);
+        showToast({
+          msg: "Error deleting folder, Try again.",
+          type: "error",
+        });
+      }
+    }
   };
 
   const handleClick = () => {
     setCurrentFolder(id);
+  };
+
+  const handleFolderRenaming = () => {
+    setRenaming(false);
   };
 
   return (
@@ -65,7 +104,7 @@ function FolderCard({ id, name }: { id: string; name: string }) {
                 )}
                 {!renaming && <span>{name}</span>}
                 {renaming && (
-                  <form onSubmit={() => setRenaming(false)}>
+                  <form onSubmit={handleFolderRenaming}>
                     <input
                       ref={inputRef}
                       type="text"

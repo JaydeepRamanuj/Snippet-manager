@@ -7,6 +7,7 @@ import { useSignUp } from "@clerk/clerk-react";
 import OTPInput from "./OTPInput";
 import { useAppStore } from "@/store/appStore";
 import { toast } from "sonner";
+import showToast from "../common/Toast";
 
 function SignupForm({
   setVerifying,
@@ -52,13 +53,13 @@ function SignupForm({
       console.log("result =>", result);
 
       if (result.status == "complete") {
-        toast.success("Signup successful.");
+        showToast({ msg: "Signup successful.", type: "success" });
         await setActive({ session: result.createdSessionId });
         setAuthDialog(false);
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || "Signup failed.");
-      toast.error("Error creating user. Try again");
+      showToast({ msg: "Error creating user. Try again", type: "error" });
       // setVerifying(false);
     } finally {
       // setVerifying(false);

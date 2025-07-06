@@ -8,13 +8,13 @@ import {
 import useAlert from "@/providers/AlertProvider";
 import type { SnippetType } from "@/types/snippetType";
 import { useAuth } from "@clerk/clerk-react";
-import { Dot, MoreVertical, Plus, Trash, X } from "lucide-react";
-import { toast } from "sonner";
+import { Edit, MoreVertical, Plus, Trash, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { allowedLanguages, capitalize, isLanguage } from "@/lib/utils";
 import { CustomDropDown } from "./common/customDropDown";
 import { useAppStore } from "@/store/appStore";
+import showToast from "./common/Toast";
 
 type SnippetTitleBarArgs = {
   snippet: SnippetType;
@@ -23,21 +23,27 @@ type SnippetTitleBarArgs = {
     property: K,
     value: SnippetType[K]
   ) => void;
+  saveSnippet: () => void;
 };
 export default function SnippetTitleBar({
   snippet,
   isUpdated,
   handleUpdate,
+  saveSnippet,
 }: SnippetTitleBarArgs) {
   const tagsInput = useRef<HTMLInputElement>(null);
+  const titleInput = useRef<HTMLInputElement>(null);
   const [addingNewTags, setAddingNewTags] = useState<boolean>(false);
   const [tagInpVal, setTagInpVal] = useState<string>("");
+  const [titleInpVal, setTitleInpVal] = useState<string>(snippet.title);
   const { showAlertWithPromise } = useAlert();
   const { getToken } = useAuth();
   const [language, setLanguage] = useState(snippet.language);
-  const [folder, setFolder] = useState(snippet.folderName || "Index");
+  const [folder, setFolder] = useState(snippet.folderName ?? "Index");
+  const [isRenaming, setRenaming] = useState<boolean>(false);
   const { currentSnippet, loadedFolders, setLoadedSnippets, loadedSnippets } =
     useAppStore();
+  const [isSaveBadgeHover, setSaveBadgeHover] = useState<boolean>(false);
 
   const deleteSnippet = async () => {
     try {
@@ -54,13 +60,13 @@ export default function SnippetTitleBar({
       const response = await fetch(`/api/snippets/${snippet._id}`, options);
 
       if (response.ok) {
-        toast.success("Snippet deleted");
+        showToast({ msg: "Snippet deleted", type: "success" });
       } else {
-        toast.error("Error deleting snippet, Try again.");
+        showToast({ msg: "Error deleting snippet, try again.", type: "error" });
       }
     } catch (error) {
       console.log("Error deleting snippet, Try again", error);
-      toast.error("Error deleting snippet, Try again.");
+      showToast({ msg: "Error deleting snippet, try again.", type: "error" });
     }
   };
 
@@ -83,8 +89,7 @@ export default function SnippetTitleBar({
     handleUpdate("tags", [...snippet.tags, tagInpVal]);
     setTagInpVal("");
   };
-  // tags: [...currentSnippet.tags, ...(value as string[])];
-  // console.log("snippet =>", snippet);
+
   const handleTagClick = (value: string) => {};
 
   const handleTagRemove = async (value: string) => {
@@ -109,15 +114,13 @@ export default function SnippetTitleBar({
 
   const handleFolderChange = (value: string) => {
     handleUpdate("folderName", value);
-    if (value != "Index") {
-      handleUpdate(
-        "folderId",
-        loadedFolders.find((folder) => folder.name == value)?._id
-      );
-    } else {
-      handleUpdate("folderId", "remove");
-    }
-    setFolder(value);
+  };
+
+  const handleTitleRenaming = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!titleInpVal) return;
+    handleUpdate("title", titleInpVal);
+    setRenaming(false);
   };
 
   const languageOptions = useMemo(() => {
@@ -129,7 +132,7 @@ export default function SnippetTitleBar({
 
   const folderOptions = useMemo(() => {
     return [
-      { label: "Index", value: "index", id: "" },
+      // { label: "Index", value: "index", id: "" },
       ...loadedFolders.map((folder) => ({
         label: capitalize(folder.name),
         value: folder.name,
@@ -138,15 +141,46 @@ export default function SnippetTitleBar({
     ];
   }, [loadedFolders]);
 
+  // console.log(folderOptions);
   useEffect(() => {
     setLanguage(currentSnippet.language);
     setFolder(currentSnippet.folderName);
   }, [currentSnippet]);
 
+  // wrapping inside timeout so ref can access element and apply focus
+  useEffect(() => {
+    setTimeout(() => {
+      if (isRenaming && titleInput.current) {
+        titleInput.current.focus();
+        titleInput.current?.select();
+      }
+    }, 0);
+  }, [isRenaming]);
   return (
     <div className="flex items-center justify-between w-full px-4 py-2  bg-background text-sm overflow-hidden">
       <div className="grow flex items-end gap-2">
-        <span className="font-medium truncate text-2xl">{snippet.title}</span>
+        {isRenaming ? (
+          <form onSubmit={handleTitleRenaming}>
+            <Input
+              ref={titleInput}
+              type="text"
+              value={titleInpVal}
+              onBlur={() => setRenaming(false)}
+              onChange={(e) => setTitleInpVal(e.target.value)}
+            />
+          </form>
+        ) : (
+          <span
+            className="font-medium truncate text-2xl"
+            onDoubleClick={() => {
+              setRenaming(true);
+              titleInput.current?.focus();
+              titleInput.current?.select();
+            }}
+          >
+            {snippet.title}
+          </span>
+        )}
 
         <div className="ml-6 flex flex-col gap-1">
           <span className="text-xs text-gray-400">Language</span>
@@ -172,16 +206,27 @@ export default function SnippetTitleBar({
           <span className="text-xs text-gray-400">Status</span>
           <Badge
             variant="outline"
-            className={`mr-auto flex items-center gap-2 border-2 ${
+            className={`mr-auto flex items-center gap-2 border-2 cursor-pointer ${
               isUpdated
                 ? "bg-amber-600/5 text-orange-300 border-orange-800/20"
                 : "bg-green-600/5 text-green-700 border-green-800/20"
             }`}
+            onMouseEnter={() => setSaveBadgeHover(true)}
+            onMouseLeave={() => setSaveBadgeHover(false)}
+            onClick={() => {
+              saveSnippet();
+            }}
           >
             {isUpdated && (
               <span className="block size-3 rounded-full bg-orange-300"></span>
             )}
-            <span>{isUpdated ? "Unsaved" : "Saved"}</span>
+            <span>
+              {isUpdated && isSaveBadgeHover
+                ? "Click to save"
+                : isUpdated
+                ? "Unsaved"
+                : "Saved"}
+            </span>
           </Badge>
         </div>
         <div className="flex flex-col gap-1">
@@ -211,7 +256,7 @@ export default function SnippetTitleBar({
 
               <form
                 onSubmit={handleTagSubmit}
-                className={`  ${addingNewTags ? "block" : "hidden"}`}
+                className={`${addingNewTags ? "block" : "hidden"}`}
               >
                 <Input
                   ref={tagsInput}
@@ -248,6 +293,17 @@ export default function SnippetTitleBar({
           <MoreVertical className="h-4 w-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuItem
+            className=" cursor-pointer"
+            onClick={() => {
+              setRenaming(true);
+              titleInput.current?.focus();
+              titleInput.current?.select();
+            }}
+          >
+            <Edit />
+            Rename
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="text-red-500 cursor-pointer"
             onClick={handleDelete}

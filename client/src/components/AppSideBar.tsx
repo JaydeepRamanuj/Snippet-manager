@@ -25,14 +25,11 @@ import type { SnippetType } from "@/types/snippetType";
 import type { FolderType } from "@/types/folderType";
 import SnippetCard from "./SnippetCard";
 import UserDropdown from "./UserDropDown";
+import { useHotkey } from "@/hooks/useHotKeys";
 
 export function AppSidebar() {
-  const {
-    setNewFileDialog,
-    setNewFolderDialog,
-    setSideBarWidth,
-    sideBarWidth,
-  } = useAppStore();
+  const { setNewFileDialog, setNewFolderDialog, setSideBarWidth } =
+    useAppStore();
   const { open } = useSidebar();
   const [folders, setFolders] = useState<FolderType[]>([]);
   const [snippets, setSnippets] = useState<SnippetType[]>([]);
@@ -83,6 +80,7 @@ export function AppSidebar() {
       setIsSnippetsLoading(false);
     }
   };
+
   const getFolders = async () => {
     const token = await getToken();
     try {
@@ -126,6 +124,16 @@ export function AppSidebar() {
       ? loadedSnippets
       : loadedSnippets.filter((snippet) => snippet.folderId == currentFolder);
   }, [currentFolder, loadedSnippets]);
+
+  // Registering shortcuts
+  useHotkey("Alt+n", () => {
+    setNewFileDialog(true);
+  });
+  useHotkey("Alt+m", () => {
+    setNewFolderDialog(true);
+  });
+
+  // useHotkey("Ctrl+s", () => console.log("Save snippet"));
 
   useEffect(() => {
     setSnippets(currentFolderSnippets);

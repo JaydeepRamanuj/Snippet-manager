@@ -88,7 +88,8 @@ export async function deleteFolder({
       _id: id,
       userId: userId,
     });
-    if (response) {
+
+    if (response.deletedCount > 0) {
       return response.acknowledged;
     } else {
       return false;
