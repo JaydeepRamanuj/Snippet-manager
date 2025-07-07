@@ -5,6 +5,7 @@ import { FolderType } from "../types/folderType";
 export async function createFolder(
   folder: Omit<FolderType, "_id">
 ): Promise<ObjectId | false> {
+  console.log("Folder create request");
   try {
     const folderCollection: Collection<FolderType> = getCollection("folders");
     const response = await folderCollection.insertOne(folder as FolderType);
@@ -32,6 +33,7 @@ export async function getFolderDetails({
   id,
   limit = 0,
 }: GetFolderDetailsArgs): Promise<FolderType[] | false> {
+  console.log("Folder get request");
   try {
     const folderCollection: Collection<FolderType> = getCollection("folders");
     const folderCursor = await folderCollection
@@ -57,6 +59,7 @@ type UpdateFolderArgs = {
   folder: Partial<FolderType>;
 };
 export async function updateFolder({ id, userId, folder }: UpdateFolderArgs) {
+  console.log("Folder update request");
   try {
     const folderCollection: Collection<FolderType> = getCollection("folders");
     const response = await folderCollection.updateOne(
@@ -82,6 +85,7 @@ export async function deleteFolder({
   id,
   userId,
 }: DeleteFolderArgs): Promise<boolean> {
+  console.log("Folder delete request");
   try {
     const folderCollection: Collection<FolderType> = getCollection("folders");
     const response = await folderCollection.deleteOne({

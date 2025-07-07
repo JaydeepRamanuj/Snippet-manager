@@ -5,6 +5,7 @@ import { SnippetType } from "../types/SnippetType";
 export async function createSnippet(
   snippet: Omit<SnippetType, "_id">
 ): Promise<ObjectId | false> {
+  console.log("Snippet create request");
   try {
     const snippetCollection: Collection<SnippetType> =
       getCollection("snippets");
@@ -25,13 +26,10 @@ export async function updateSnippet(
   userId: string,
   snippetPart: SnippetType
 ): Promise<boolean> {
+  console.log("Snippet update request");
   try {
     const snippetCollection: Collection<SnippetType> =
       getCollection("snippets");
-
-    console.log("updateSnippet - Query ID:", id);
-    console.log("updateSnippet - Query userId:", userId);
-    console.log("updateSnippet - Fields to update:", snippetPart);
 
     // const { _id, ...fieldsToUpdate } = snippetPart;
 
@@ -39,8 +37,6 @@ export async function updateSnippet(
       { _id: id, userId: userId },
       { $set: snippetPart }
     );
-
-    console.log(response);
 
     if (response.modifiedCount > 0) {
       return response.acknowledged;
@@ -70,6 +66,7 @@ export async function getSnippets({
   userId,
   limit = 0,
 }: getSnippetsType): Promise<SnippetType[] | false> {
+  console.log("Snippet get request");
   try {
     const snippetCollection: Collection<SnippetType> =
       getCollection("snippets");
@@ -120,6 +117,7 @@ export async function getSnippets({
 }
 
 export async function getSingleSnippet(id: ObjectId, userId: string) {
+  console.log("Snippet get request");
   try {
     const snippetCollection: Collection<SnippetType> =
       getCollection("snippets");
@@ -143,6 +141,7 @@ export async function deleteSnippet(
   id: ObjectId,
   userId: string
 ): Promise<boolean> {
+  console.log("Snippet delete request");
   try {
     const snippetCollection: Collection<SnippetType> =
       getCollection("snippets");

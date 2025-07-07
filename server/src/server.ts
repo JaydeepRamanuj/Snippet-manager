@@ -24,6 +24,8 @@ app.use(
   })
 );
 
+console.log("origin =>", origin);
+
 // This clerk middleware will provide user'data and can be useful when we want to access userId or whole user Object
 app.use(clerkMiddleware());
 
