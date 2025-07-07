@@ -2,7 +2,7 @@
   <img src="./client/public/Screenshot from 2025-07-07 11-39-14.png" alt="Snippet Manager Screenshot" width="700"/>
 </p>
 
-# 🧠 Snippet Manager
+# 🧠 Snippet Manager - v1
 
 A powerful, elegant, and desktop first web app to **create, organize, and manage reusable code snippets**.  
 Built for developers tired of hunting through old projects, this tool keeps your frequently used logic, components, and utilities at your fingertips.
@@ -63,13 +63,13 @@ Modern development often involves reusing similar functions, components, and log
 
 ---
 
-#### 💻 From the Developer
+## 💻 From the Developer
 
 This isn't just a practice project — it's a real solution to a real developer pain: organizing and reusing code efficiently.
 
 I built Snippet Manager to become a tool that _every developer_ can benefit from, and I'm actively improving it with real-world use in mind.
 
-💬 **Planned Features (V2 & Beyond)**:
+#### 💬 **Planned Features (V2 & Beyond)**
 
 - 📄 Multi-page snippets
 - 🔍 Full fuzzy search with tag and folder support
@@ -78,3 +78,15 @@ I built Snippet Manager to become a tool that _every developer_ can benefit from
 - 🔗 Snippet sharing and collaboration
 - 🤖 AI-powered code explanation + save as note
 - 🔄 Snippet import/export
+- Drag and Drop snippet across folder
+
+#### 🐞 Known Issues / Improvements in Progress
+
+- 🔍 Currently only searches by title (tag/folder search coming)
+- 📱 Not yet optimized for mobile
+- 🔐 Google/GitHub login + password reset flow planned
+- 🛡️ Minimal form validation (being improved)
+- ⚙️ API responses are being standardized
+- 🧪 OTP flow polishing in progress
+
+I'm actively polishing the app to improve usability.
