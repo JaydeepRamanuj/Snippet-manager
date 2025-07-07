@@ -1,54 +1,80 @@
-# React + TypeScript + Vite
+<p align="center">
+  <img src="./client/public/Screenshot from 2025-07-07 11-39-14.png" alt="Snippet Manager Screenshot" width="700"/>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🧠 Snippet Manager
 
-Currently, two official plugins are available:
+A powerful, elegant, and desktop first web app to **create, organize, and manage reusable code snippets**.  
+Built for developers tired of hunting through old projects, this tool keeps your frequently used logic, components, and utilities at your fingertips.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> 🚀 Live: [https://snippet-manager-gamma.vercel.app](https://snippet-manager-gamma.vercel.app)  
+> ⚙️ Backend: [https://snippet-manager-qxtx.onrender.com](https://snippet-manager-qxtx.onrender.com)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🎯 Objective
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Modern development often involves reusing similar functions, components, and logic — but keeping them organized across projects is painful.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Snippet Manager** solves this by offering a minimal, blazing-fast snippet dashboard where you can:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Organize snippets into folders
+- Edit and preview code using a rich text/code editor
+- Tag, search, and filter through your logic in seconds
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## ✨ Features
+
+- ⚡️ **Single-page design** for lightning-fast UX
+- 🔐 **Authentication** via Clerk (custom UI + OTP support)
+- 📁 **Folder & Snippet Structure**: Clean hierarchy to store related code blocks
+- 🧠 **Rich Code Editor** with syntax highlighting (powered by **Monaco Editor**)
+- 🗒️ **Rich Note Editor** with modern text blocks (powered by Tiptap + extensions)
+- 🔎 **Search Snippets** by title (tag and folder search coming soon)
+- ⌨️ **Keyboard Shortcuts**: CMD/CTRL+P to open the command menu, ESC to close dialogs, and more
+- 🌙 **Dark/Light Mode** with theme toggle
+- 🧪 **Polished Dialogs and Popups**: Custom modals for new snippets, folders, settings
+- 🧱 **Reusable UI System** built using ShadCN + Tailwind
+
+---
+
+## 🛠 Tech Stack
+
+**Frontend**
+
+- React (TypeScript)
+- Tailwind CSS
+- ShadCN/UI
+- Monaco Editor (for code support)
+- Tiptap Editor (for note support)
+- Zustand (for state management)
+
+**Backend**
+
+- Node.js + Express (TypeScript)
+- MongoDB (Atlas)
+- Clerk (for authentication)
+
+**Deployment**
+
+- Frontend: Vercel
+- Backend: Render
+
+---
+
+#### 💻 From the Developer
+
+This isn't just a practice project — it's a real solution to a real developer pain: organizing and reusing code efficiently.
+
+I built Snippet Manager to become a tool that _every developer_ can benefit from, and I'm actively improving it with real-world use in mind.
+
+💬 **Planned Features (V2 & Beyond)**:
+
+- 📄 Multi-page snippets
+- 🔍 Full fuzzy search with tag and folder support
+- 📱 Mobile support
+- 🧩 VSCode Extension
+- 🔗 Snippet sharing and collaboration
+- 🤖 AI-powered code explanation + save as note
+- 🔄 Snippet import/export
