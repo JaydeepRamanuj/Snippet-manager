@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./client/public/Screenshot from 2025-07-07 11-39-14.png" alt="Snippet Manager Screenshot" width="700"/>
+  <img src="./client/public/Screenshot.png" alt="Snippet Manager Screenshot" width="700"/>
 </p>
 
 # 🧠 Snippet Manager - v1
