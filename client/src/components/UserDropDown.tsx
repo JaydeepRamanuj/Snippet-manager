@@ -6,13 +6,14 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogIn, LogOut, Settings, User } from "lucide-react";
+import { Keyboard, LogIn, LogOut, Settings, User, Wrench } from "lucide-react";
 import { useAppStore } from "@/store/appStore";
 import { useClerk, useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
 
 function UserDropdown() {
-  const { setAuthDialog, setSettingsDialog } = useAppStore();
+  const { setAuthDialog, setSettingsDialog, setCurrentSettingsTab } =
+    useAppStore();
   const { signOut } = useClerk();
   const { isSignedIn, user } = useUser();
 
@@ -36,13 +37,41 @@ function UserDropdown() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem onClick={() => setSettingsDialog(true)}>
+        <DropdownMenuItem
+          onClick={() => {
+            setCurrentSettingsTab("account");
+            setSettingsDialog(true);
+          }}
+        >
           <User className="w-4 h-4 mr-2" />
           Profile
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setSettingsDialog(true)}>
+        <DropdownMenuItem
+          onClick={() => {
+            setCurrentSettingsTab("preferences");
+            setSettingsDialog(true);
+          }}
+        >
           <Settings className="w-4 h-4 mr-2" />
           Settings
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setCurrentSettingsTab("shortcuts");
+            setSettingsDialog(true);
+          }}
+        >
+          <Keyboard className="w-4 h-4 mr-2" />
+          Shortcuts
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setCurrentSettingsTab("changelogs");
+            setSettingsDialog(true);
+          }}
+        >
+          <Wrench className="w-4 h-4 mr-2" />
+          Change Logs
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

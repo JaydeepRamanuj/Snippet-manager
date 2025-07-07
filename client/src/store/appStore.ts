@@ -23,6 +23,7 @@ interface AppState {
   loadedFolders: FolderType[];
   sideBarWidth: number;
   recentSnippets: string[];
+  currentSettingsTab: string;
 
   toggleSidebar: () => void;
   setEditingMode: (value: boolean) => void;
@@ -44,6 +45,7 @@ interface AppState {
   setSideBarWidth: (value: number) => void;
   addToRecentSnippets: (value: string) => void;
   setSettingsDialog: (value: boolean) => void;
+  setCurrentSettingsTab: (value: string) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -82,6 +84,7 @@ export const useAppStore = create<AppState>((set) => ({
   ],
   sideBarWidth: 500,
   recentSnippets: [],
+  currentSettingsTab: "account",
 
   toggleSidebar: () =>
     set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
@@ -101,6 +104,7 @@ export const useAppStore = create<AppState>((set) => ({
   setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
   setLoadedFolders: (folders) => set({ loadedFolders: folders }),
   setSideBarWidth: (value) => set({ sideBarWidth: value }),
+  setCurrentSettingsTab: (value) => set({ currentSettingsTab: value }),
   addTag: (tag) =>
     set((state) => ({
       filteringTags: [...new Set([...state.filteringTags, tag])],

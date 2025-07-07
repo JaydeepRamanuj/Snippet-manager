@@ -1,20 +1,28 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils"; // optional: to handle conditional classNames
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShortcutsTab from "./tabs/ShortcutsTab";
 import AccountTab from "./tabs/AccountTab";
 import PreferencesTab from "./tabs/PreferencesTab";
 import { useAppStore } from "@/store/appStore";
+import ChangeLogsTab from "./tabs/ChangeLogsTab";
 
 const settingOptions = [
   { key: "account", label: "Account" },
   { key: "preferences", label: "Preferences" },
   { key: "shortcuts", label: "Shortcuts" },
+  { key: "changelogs", label: "ChangeLogs" },
 ];
 
 export function SettingsDialog() {
-  const [activeTab, setActiveTab] = useState("account");
-  const { showSettingsDialog, setSettingsDialog } = useAppStore();
+  const { showSettingsDialog, setSettingsDialog, currentSettingsTab } =
+    useAppStore();
+
+  const [activeTab, setActiveTab] = useState(currentSettingsTab || "account");
+
+  useEffect(() => {
+    setActiveTab(currentSettingsTab);
+  }, [currentSettingsTab]);
 
   return (
     <Dialog open={showSettingsDialog} onOpenChange={setSettingsDialog}>
@@ -29,7 +37,7 @@ export function SettingsDialog() {
                 <div
                   key={item.key}
                   className={cn(
-                    "text-left px-3 py-2 rounded-md rounded-r-none hover:bg-white/5 transition",
+                    "text-left px-3 py-2 rounded-md rounded-r-none hover:bg-white/5 transition cursor-pointer",
                     activeTab === item.key && "bg-white/5 font-medium"
                   )}
                   onClick={() => setActiveTab(item.key)}
@@ -45,6 +53,7 @@ export function SettingsDialog() {
             {activeTab === "account" && <AccountTab />}
             {activeTab === "preferences" && <PreferencesTab />}
             {activeTab === "shortcuts" && <ShortcutsTab />}
+            {activeTab === "changelogs" && <ChangeLogsTab />}
           </div>
         </div>
       </DialogContent>

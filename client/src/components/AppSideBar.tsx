@@ -26,10 +26,15 @@ import type { FolderType } from "@/types/folderType";
 import SnippetCard from "./SnippetCard";
 import UserDropdown from "./UserDropDown";
 import { useHotkey } from "@/hooks/useHotKeys";
+import showToast from "./common/Toast";
 
 export function AppSidebar() {
-  const { setNewFileDialog, setNewFolderDialog, setSideBarWidth } =
-    useAppStore();
+  const {
+    setNewFileDialog,
+    setNewFolderDialog,
+    setSideBarWidth,
+    setAuthDialog,
+  } = useAppStore();
   const { open } = useSidebar();
   const [folders, setFolders] = useState<FolderType[]>([]);
   const [snippets, setSnippets] = useState<SnippetType[]>([]);
@@ -129,9 +134,19 @@ export function AppSidebar() {
 
   // Registering shortcuts
   useHotkey("Alt+n", () => {
+    if (!user?.id) {
+      showToast({ msg: "Please login to add new Snippets.", type: "info" });
+      setAuthDialog(true);
+      return;
+    }
     setNewFileDialog(true);
   });
   useHotkey("Alt+m", () => {
+    if (!user?.id) {
+      showToast({ msg: "Please login to add new folder.", type: "info" });
+      setAuthDialog(true);
+      return;
+    }
     setNewFolderDialog(true);
   });
 

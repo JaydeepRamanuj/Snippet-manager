@@ -19,6 +19,7 @@ function MainPage() {
     setCurrentSnippet,
     setLoadedSnippets,
     loadedFolders,
+    setAuthDialog,
   } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isSnippetDetailsUpdated, setIsSnippetDetailsUpdated] = useState(false);
@@ -112,7 +113,11 @@ function MainPage() {
 
   // If snippet is not created but user first add code and then save it
   const createSnippet = async () => {
-    if (!user?.id) return;
+    if (!user?.id) {
+      showToast({ msg: "Please login to add new folder.", type: "info" });
+      setAuthDialog(true);
+      return;
+    }
     const { _id, ...snippetPart } = currentSnippet;
 
     const newSnippet: Omit<SnippetType, "_id"> = {
