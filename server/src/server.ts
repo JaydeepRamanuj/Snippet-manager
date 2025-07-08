@@ -1,10 +1,11 @@
-import express from "express";
+import express, { Response } from "express";
 import cors from "cors";
 import { connectToDatabase } from "./db/mongoSetup";
 import { clerkMiddleware } from "@clerk/express";
 import snippetsRouter from "./routes/snippetRoute";
 import folderRouter from "./routes/folderRoute";
 import userRouter from "./routes/userRoute";
+import changeLogsRouter from "./routes/changeLogsRoutes";
 
 const app = express();
 const PORT = process.env.PORT || "3000";
@@ -18,13 +19,10 @@ app.use(
   cors({
     // client origin
     origin: origin,
-
-    // // For clerk
-    // credentials: true,
   })
 );
 
-console.log("origin =>", origin);
+console.log("Allowed client origin =>", origin);
 
 // This clerk middleware will provide user'data and can be useful when we want to access userId or whole user Object
 app.use(clerkMiddleware());
@@ -35,9 +33,10 @@ startServer();
 app.use("/api/snippets", snippetsRouter);
 app.use("/api/folders", folderRouter);
 app.use("/api/users", userRouter);
+app.use("/api/changelogs", changeLogsRouter);
 
 // Handling errors
-app.use((err: any, res: express.Response) => {
+app.use((err: any, res: Response) => {
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
 });

@@ -1,3 +1,4 @@
+import type { Category, ItemType, Status } from "@/types/changeLogType";
 import type { Language } from "@/types/snippetType";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -31,8 +32,29 @@ export const allowedLanguages: Language[] = [
   "other",
 ];
 
+export const categories: Category[] = ["fix", "known", "planned", "v2-beyond"];
+export const status: Status[] = ["pending", "in-process", "completed"];
+export const itemTypes: ItemType[] = [
+  "UI",
+  "UX",
+  "Logic",
+  "Performance",
+  "Feature",
+  "Backend",
+  "Security",
+];
+
 export function isLanguage(value: string): value is Language {
   return allowedLanguages.includes(value as Language);
+}
+export function isStatus(value: string): value is Status {
+  return status.includes(value as Status);
+}
+export function isCategory(value: string): value is Category {
+  return categories.includes(value as Category);
+}
+export function isItemType(value: string): value is ItemType {
+  return itemTypes.includes(value as ItemType);
 }
 
 export function capitalize(str: string) {

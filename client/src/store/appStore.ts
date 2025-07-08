@@ -1,3 +1,4 @@
+import type { ChangeLogType } from "@/types/changeLogType";
 import type { FolderType } from "@/types/folderType";
 import type { SnippetType } from "@/types/snippetType";
 import { create } from "zustand";
@@ -13,6 +14,7 @@ interface AppState {
   filteringTags: string[];
   showNewFolderDialog: boolean;
   showNewFileDialog: boolean;
+  showNewChangeLogDialog: boolean;
   showAuthDialog: boolean;
   showSearchDialog: boolean;
   showSettingsDialog: boolean;
@@ -21,6 +23,7 @@ interface AppState {
   currentFolder: string;
   loadedSnippets: SnippetType[];
   loadedFolders: FolderType[];
+  loadedChangeLogs: ChangeLogType[];
   sideBarWidth: number;
   recentSnippets: string[];
   currentSettingsTab: string;
@@ -36,12 +39,14 @@ interface AppState {
   removeTag: (tag: string) => void;
   setNewFolderDialog: (value: boolean) => void;
   setNewFileDialog: (value: boolean) => void;
+  setNewChangeLogDialog: (value: boolean) => void;
   setAuthDialog: (value: boolean) => void;
   setAlertDialogMessage: (str: string) => void;
   setCurrentSnippet: (snippet: SnippetType) => void;
   setCurrentFolder: (snippetId: string) => void;
   setLoadedSnippets: (snippets: SnippetType[]) => void;
   setLoadedFolders: (folders: FolderType[]) => void;
+  setLoadedChangeLogs: (changelogs: ChangeLogType[]) => void;
   setSideBarWidth: (value: number) => void;
   addToRecentSnippets: (value: string) => void;
   setSettingsDialog: (value: boolean) => void;
@@ -55,6 +60,7 @@ export const useAppStore = create<AppState>((set) => ({
   isLoading: false,
   showNewFolderDialog: false,
   showNewFileDialog: false,
+  showNewChangeLogDialog: false,
   showAuthDialog: false,
   showSearchDialog: false,
   showSettingsDialog: false,
@@ -82,6 +88,7 @@ export const useAppStore = create<AppState>((set) => ({
       userId: "app",
     },
   ],
+  loadedChangeLogs: [],
   sideBarWidth: 500,
   recentSnippets: [],
   currentSettingsTab: "account",
@@ -96,6 +103,7 @@ export const useAppStore = create<AppState>((set) => ({
   setFilteringTags: (tags) => set({ filteringTags: tags }),
   setNewFolderDialog: (value) => set({ showNewFolderDialog: value }),
   setNewFileDialog: (value) => set({ showNewFileDialog: value }),
+  setNewChangeLogDialog: (value) => set({ showNewChangeLogDialog: value }),
   setAuthDialog: (value) => set({ showAuthDialog: value }),
   setSettingsDialog: (value) => set({ showSettingsDialog: value }),
   setAlertDialogMessage: (str) => set({ alertDialogMessage: str }),
@@ -103,6 +111,7 @@ export const useAppStore = create<AppState>((set) => ({
   setCurrentFolder: (folderId) => set({ currentFolder: folderId }),
   setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
   setLoadedFolders: (folders) => set({ loadedFolders: folders }),
+  setLoadedChangeLogs: (changelogs) => set({ loadedChangeLogs: changelogs }),
   setSideBarWidth: (value) => set({ sideBarWidth: value }),
   setCurrentSettingsTab: (value) => set({ currentSettingsTab: value }),
   addTag: (tag) =>

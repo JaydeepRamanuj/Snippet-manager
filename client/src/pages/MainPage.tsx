@@ -53,9 +53,13 @@ function MainPage() {
           setCurrentSnippet(result);
           setActiveSnippetId(result._id);
           setIsLoading(false);
+        } else {
+          console.log("Error fetching snippets");
+          showToast({ msg: "Error fetching snippets", type: "error" });
         }
       } catch (error) {
         console.log("Error getting snippets", error);
+        showToast({ msg: "Error fetching snippets", type: "error" });
         setIsLoading(false);
       }
     };

@@ -51,7 +51,6 @@ export function AppSidebar() {
   const { user } = useUser();
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
-
   const {
     loadedSnippets,
     setLoadedSnippets,

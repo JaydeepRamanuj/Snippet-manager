@@ -2,6 +2,7 @@ import AuthDialog from "./auth/AuthDialog";
 import CustomAlertDialog from "./CustomAlertDialog";
 import { NewSnippetDialog } from "./NewSnippetDialog";
 import { NewFolderDialog } from "./NewFolderDialog";
+import NewChangeLogDialog from "./ChangeLogForm";
 
 function Dialogs() {
   return (
@@ -10,6 +11,7 @@ function Dialogs() {
       <NewFolderDialog />
       <AuthDialog />
       <CustomAlertDialog />
+      <NewChangeLogDialog />
     </div>
   );
 }

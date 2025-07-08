@@ -16,7 +16,7 @@ export async function createSnippet(
       return false;
     }
   } catch (error) {
-    console.log("Error creating new document", error);
+    console.log("Error creating new snippet", error);
     return false;
   }
 }
@@ -44,7 +44,7 @@ export async function updateSnippet(
       return false;
     }
   } catch (error) {
-    console.log("Error updating the document", error);
+    console.log("Error updating the snippet", error);
     return false;
   }
 }
@@ -111,7 +111,7 @@ export async function getSnippets({
       return false;
     }
   } catch (error) {
-    console.log("Error fetching snippets", error);
+    console.log("Error getting snippets", error);
     return false;
   }
 }
@@ -150,7 +150,7 @@ export async function deleteSnippet(
       _id: id,
       userId: userId,
     });
-    if (response) {
+    if (response.deletedCount > 0) {
       return response.acknowledged;
     } else {
       return false;

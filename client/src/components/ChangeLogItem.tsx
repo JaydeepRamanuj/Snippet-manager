@@ -1,52 +1,36 @@
 import { Badge } from "@/components/ui/badge";
+import type { ChangeLogType } from "@/types/changeLogType";
 
-type ChangeLogItemProps = {
-  title: string;
-  description?: string;
-  category: "fix" | "known" | "planned";
-  status: "pending" | "in-process" | "completed";
-  timestamp?: string;
-  author?: string;
-  itemType: "UI" | "UX" | "Logic" | "Performance" | "Feature";
-};
-
-export default function ChangeLogItem({
-  title,
-  description,
-  status,
-  timestamp,
-  author = "JD",
-  itemType,
-}: ChangeLogItemProps) {
+export default function ChangeLogItem(log: ChangeLogType) {
   return (
     <div className="rounded-xl border bg-background p-2 shadow-sm space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-md font-bold">{title}</h3>
+        <h3 className="text-md font-bold">{log.title}</h3>
         <div className="flex items-center gap-2">
           <span
             className={`${
-              status == "completed"
+              log.status == "completed"
                 ? "text-green-300/60"
-                : status == "in-process"
+                : log.status == "in-process"
                 ? "text-gray-500"
                 : "text-orange-400/60"
             }`}
           >
-            {status === "in-process" && "In Process"}
-            {status === "completed" && "Completed"}
-            {status === "pending" && "Pending"}
+            {log.status === "in-process" && "In Process"}
+            {log.status === "completed" && "Completed"}
+            {log.status === "pending" && "Pending"}
           </span>
-          <Badge variant="outline">{itemType}</Badge>
+          <Badge variant="outline">{log.itemType}</Badge>
         </div>
       </div>
 
-      {description && (
-        <p className="mt-3 text-sm text-muted-foreground">{description}</p>
+      {log.description && (
+        <p className="mt-3 text-sm text-muted-foreground">{log.description}</p>
       )}
 
       <div className="text-xs text-muted-foreground flex justify-between pt-2 border-t">
-        <span>🛠 by {author}</span>
-        {timestamp && <span>🕒 {timestamp}</span>}
+        <span>🛠 by {log.author}</span>
+        {log.timestamp && <span>🕒 {log.timestamp}</span>}
       </div>
     </div>
   );

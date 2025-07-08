@@ -63,7 +63,7 @@ export function NewSnippetDialog() {
       userId: user?.id,
     };
 
-    console.log("newSnippet =>", newSnippet);
+    // console.log("newSnippet =>", newSnippet);
     try {
       const options = {
         method: "POST",
@@ -151,23 +151,6 @@ export function NewSnippetDialog() {
               className="mt-2"
             />
           </div>
-
-          {/* <div>
-            <Label htmlFor="parent">Parent Folder</Label>
-            <Input
-              id="parent"
-              required
-              value={folder}
-              onChange={(e) => setFolder(e.target.value)}
-              placeholder="e.g. hooks"
-              className="mt-2"
-            />
-          </div> */}
-
-          {/* <FolderDropDown
-            value={folder}
-            onUpdate={(value: string) => setFolder(value)}
-          /> */}
 
           <div>
             <Label className="mb-3">Folder</Label>
