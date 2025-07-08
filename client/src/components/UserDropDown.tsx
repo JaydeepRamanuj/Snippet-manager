@@ -6,7 +6,15 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Keyboard, LogIn, LogOut, Settings, User, Wrench } from "lucide-react";
+import {
+  Keyboard,
+  LogIn,
+  LogOut,
+  Megaphone,
+  Settings,
+  User,
+  Wrench,
+} from "lucide-react";
 import { useAppStore } from "@/store/appStore";
 import { useClerk, useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
@@ -72,6 +80,16 @@ function UserDropdown() {
         >
           <Wrench className="w-4 h-4 mr-2" />
           Change Logs
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={() => {
+            setCurrentSettingsTab("whats-new");
+            setSettingsDialog(true);
+          }}
+        >
+          <Megaphone className="w-4 h-4 mr-2" />
+          What's new
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

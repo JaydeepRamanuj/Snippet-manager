@@ -6,12 +6,14 @@ import AccountTab from "./tabs/AccountTab";
 import PreferencesTab from "./tabs/PreferencesTab";
 import { useAppStore } from "@/store/appStore";
 import ChangeLogsTab from "./tabs/ChangeLogsTab";
+import WhatsNewTab from "./tabs/WhatsNewTab";
 
 const settingOptions = [
   { key: "account", label: "Account" },
   { key: "preferences", label: "Preferences" },
   { key: "shortcuts", label: "Shortcuts" },
   { key: "changelogs", label: "ChangeLogs" },
+  { key: "whats-new", label: "What's new" },
 ];
 
 export function SettingsDialog() {
@@ -54,6 +56,7 @@ export function SettingsDialog() {
             {activeTab === "preferences" && <PreferencesTab />}
             {activeTab === "shortcuts" && <ShortcutsTab />}
             {activeTab === "changelogs" && <ChangeLogsTab />}
+            {activeTab === "whats-new" && <WhatsNewTab />}
           </div>
         </div>
       </DialogContent>
