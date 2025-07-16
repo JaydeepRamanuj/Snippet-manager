@@ -106,6 +106,7 @@ const NewChangeLogDialog = () => {
         <DialogHeader>
           <DialogTitle>
             <span>Create New changeLog</span>
+            <br />
             <span className="mt-2 text-xs text-orange-300/80">
               This feature will only be available to admin in future
             </span>

@@ -50,6 +50,7 @@ function LoginForm({ onForgotPassword }: LoginFormProps) {
       <form onSubmit={handleLogin} className="space-y-3">
         <Input
           type="text"
+          autoFocus={true}
           placeholder="Email or username"
           required
           value={emailOrUsername}
@@ -64,6 +65,7 @@ function LoginForm({ onForgotPassword }: LoginFormProps) {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button
+            type="button"
             variant="outline"
             size="icon"
             onClick={(e) => {

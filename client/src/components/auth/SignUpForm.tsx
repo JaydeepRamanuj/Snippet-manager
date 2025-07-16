@@ -134,6 +134,7 @@ function SignupForm({
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button
+            type="button"
             variant="outline"
             size="icon"
             onClick={(e) => {
