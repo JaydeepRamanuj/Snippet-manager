@@ -322,13 +322,13 @@ export function AppSidebar() {
                 key={folder._id}
                 className={`rounded-md border px-3 last:border ${openFolders.includes(folder._id) && "bg-white/5"}`}
               >
-                <AccordionTrigger className="!rotate-0 p-2 !transition-none">
+                <AccordionTrigger className="flex !rotate-0 items-center justify-center p-2 !transition-none">
                   {openFolders.includes(folder._id) ? (
                     <FolderOpen className="!rotate-0 !transition-none" />
                   ) : (
                     <Folder />
                   )}
-                  <span>{folder.name}</span>
+                  <span className="mr-auto">{folder.name}</span>
                 </AccordionTrigger>
                 <AccordionContent className="mt-4 flex flex-col text-balance">
                   {snippets.length == 0 ? (

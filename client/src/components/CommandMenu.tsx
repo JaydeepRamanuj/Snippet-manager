@@ -82,7 +82,9 @@ export function CommandMenu() {
         }}
       />
       <CommandList>
-        <CommandEmpty>No snippets found</CommandEmpty>
+        {recentItems.length == 0 && (
+          <CommandEmpty>No snippets found</CommandEmpty>
+        )}
         <CommandGroup
           forceMount
           heading={`${

@@ -102,7 +102,7 @@ const NewChangeLogDialog = () => {
 
   return (
     <Dialog open={showNewChangeLogDialog} onOpenChange={setNewChangeLogDialog}>
-      <DialogContent className="w-fit">
+      <DialogContent className="w-fit min-w-[300px]">
         <DialogHeader>
           <DialogTitle>
             <span>Create New changeLog</span>
