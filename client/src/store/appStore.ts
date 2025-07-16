@@ -28,6 +28,7 @@ interface AppState {
   recentSnippets: string[];
   currentSettingsTab: string;
   shownDesktopOptimizedDialog: boolean;
+  openFolders: string[];
 
   toggleSidebar: () => void;
   setEditingMode: (value: boolean) => void;
@@ -53,6 +54,7 @@ interface AppState {
   setSettingsDialog: (value: boolean) => void;
   setCurrentSettingsTab: (value: string) => void;
   setDesktopOptimizedDialog: (value: boolean) => void;
+  setOpenFolders: (value: string[]) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -97,6 +99,7 @@ export const useAppStore = create<AppState>()(
       recentSnippets: [],
       currentSettingsTab: "account",
       shownDesktopOptimizedDialog: true,
+      openFolders: ["index"],
 
       toggleSidebar: () =>
         set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
@@ -116,6 +119,7 @@ export const useAppStore = create<AppState>()(
       setCurrentFolder: (folderId) => set({ currentFolder: folderId }),
       setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
       setLoadedFolders: (folders) => set({ loadedFolders: folders }),
+      setOpenFolders: (folders) => set({ openFolders: folders }),
       setLoadedChangeLogs: (changelogs) =>
         set({ loadedChangeLogs: changelogs }),
       setSideBarWidth: (value) => set({ sideBarWidth: value }),

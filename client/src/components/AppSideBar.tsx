@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Folder, FolderOpen, Plus } from "lucide-react";
 
 import {
   Sidebar,
@@ -10,6 +10,12 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import { ThemeModeToggle } from "./ThemeModeToggle";
 import FolderCard from "./FolderCard";
@@ -27,6 +33,7 @@ import SnippetCard from "./SnippetCard";
 import UserDropdown from "./UserDropDown";
 import { useHotkey } from "@/hooks/useHotKeys";
 import showToast from "./common/Toast";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 export function AppSidebar() {
   const {
@@ -50,6 +57,8 @@ export function AppSidebar() {
   const { getToken, isLoaded } = useAuth();
   const { user } = useUser();
 
+  const breakpoint = useBreakpoint();
+
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const {
     loadedSnippets,
@@ -57,6 +66,8 @@ export function AppSidebar() {
     loadedFolders,
     setLoadedFolders,
     currentFolder,
+    openFolders,
+    setOpenFolders,
   } = useAppStore();
   // console.log("user.id =>", user?.id);
 
@@ -178,6 +189,8 @@ export function AppSidebar() {
     setIsCalculatingSideBarWidth(false);
   }, [, isCalculatingSideBarWidth, snippets]);
 
+  console.log("openFolders =>", openFolders);
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className={`${open && "p-1.5"}`}>
@@ -188,7 +201,7 @@ export function AppSidebar() {
             <SearchBar />
           </SidebarGroupContent>
         </SidebarGroup>
-        {open && (
+        {breakpoint && breakpoint > 600 && open && (
           <div className="">
             <Separator />
             <div className="flex">
@@ -293,6 +306,60 @@ export function AppSidebar() {
             </div>
             <Separator />
           </div>
+        )}
+
+        {breakpoint && breakpoint < 600 && (
+          <Accordion
+            type="multiple"
+            className="flex w-full flex-col gap-2 p-2"
+            value={openFolders}
+            onValueChange={(value) => {
+              console.log("value =>", value);
+              setOpenFolders(value);
+            }}
+          >
+            {folders.map((folder) => (
+              <AccordionItem
+                value={folder._id}
+                key={folder._id}
+                className={`rounded-md border px-3 last:border ${openFolders.includes(folder._id) && "bg-white/5"}`}
+              >
+                <AccordionTrigger className="!rotate-0 p-2 !transition-none">
+                  {openFolders.includes(folder._id) ? (
+                    <FolderOpen className="!rotate-0 !transition-none" />
+                  ) : (
+                    <Folder />
+                  )}
+                  <span>{folder.name}</span>
+                </AccordionTrigger>
+                <AccordionContent className="mt-4 flex flex-col text-balance">
+                  {snippets.length == 0 ? (
+                    <div className="py-6 text-center text-gray-500">
+                      No snippets found
+                    </div>
+                  ) : (
+                    loadedSnippets
+                      .filter((snippet) =>
+                        folder._id != "index"
+                          ? snippet.folderId == folder._id
+                          : true,
+                      )
+                      .map((snippet) => (
+                        <SnippetCard
+                          key={String(snippet._id)}
+                          _id={snippet._id}
+                          title={snippet.title}
+                          language={snippet.language}
+                          lastUpdateOn={snippet.lastUpdatedOn}
+                          tags={snippet.tags}
+                          folderName={snippet.folderName}
+                        />
+                      ))
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         )}
         <SidebarFooter className="mt-auto ml-auto">
           <UserDropdown />

@@ -2,6 +2,8 @@ import { useAppStore } from "@/store/appStore";
 import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
 import { Folder } from "lucide-react";
+import { useSidebar } from "./ui/sidebar";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 function SnippetCard({
   title,
@@ -25,6 +27,8 @@ function SnippetCard({
     addToRecentSnippets,
   } = useAppStore();
 
+  const { setOpenMobile } = useSidebar();
+  const breakpoint = useBreakpoint();
   const handleClick = () => {
     if (loadedSnippets) {
       if (currentSnippet._id === _id) return;
@@ -34,6 +38,7 @@ function SnippetCard({
       if (newCurrentSnippet) {
         setCurrentSnippet(newCurrentSnippet);
         addToRecentSnippets(newCurrentSnippet._id);
+        breakpoint && breakpoint < 600 && setOpenMobile(false);
       }
     }
   };
