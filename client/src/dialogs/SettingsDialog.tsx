@@ -51,7 +51,7 @@ export function SettingsDialog() {
           </div>
 
           {/* Right column: content */}
-          <div className="grow overflow-y-auto bg-white/5 p-3">
+          <div className="grow overflow-y-auto bg-white/5">
             {activeTab === "account" && <AccountTab />}
             {activeTab === "preferences" && <PreferencesTab />}
             {activeTab === "shortcuts" && <ShortcutsTab />}

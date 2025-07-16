@@ -14,29 +14,27 @@ function ShortcutsTab() {
   ];
 
   return (
-    <div className="space-y-4">
+    <ScrollArea className="flex h-full flex-col gap-4 overflow-auto p-3">
       <h2 className="text-lg font-semibold">Keyboard Shortcuts</h2>
-      <ScrollArea className="flex flex-col overflow-auto">
-        {shortcuts.map((shortcut) => (
-          <div
-            key={shortcut.name}
-            className="bg-muted item-start mt-2 flex flex-col justify-between rounded-md border p-1 md:flex-row md:items-center"
-          >
-            <span className="text-sm">{shortcut.name}</span>
-            <div className="mt-2 md:mt-0 md:ml-auto md:space-x-2">
-              {shortcut.keys.map((key) => (
-                <kbd
-                  key={key}
-                  className="bg-background/40 rounded-md border px-2 py-1 font-mono text-xs font-semibold"
-                >
-                  {key}
-                </kbd>
-              ))}
-            </div>
+      {shortcuts.map((shortcut) => (
+        <div
+          key={shortcut.name}
+          className="bg-muted item-start mt-2 flex flex-col justify-between rounded-md border p-1 md:flex-row md:items-center"
+        >
+          <span className="text-sm">{shortcut.name}</span>
+          <div className="mt-2 md:mt-0 md:ml-auto md:space-x-2">
+            {shortcut.keys.map((key) => (
+              <kbd
+                key={key}
+                className="bg-background/40 rounded-md border px-2 py-1 font-mono text-xs font-semibold"
+              >
+                {key}
+              </kbd>
+            ))}
           </div>
-        ))}
-      </ScrollArea>
-    </div>
+        </div>
+      ))}
+    </ScrollArea>
   );
 }
 

@@ -11,7 +11,7 @@ import { useTheme } from "@/providers/themeProvider";
 function PreferencesTab() {
   const { theme, setTheme } = useTheme();
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-3">
       <h2 className="text-lg font-semibold">Preferences</h2>
 
       <div className="space-y-2">

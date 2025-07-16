@@ -46,30 +46,30 @@ function ChangeLogsTab() {
   }, [loadedChangeLogs]);
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Snippet Manager</h2>
-        <Badge variant="outline">Version 1.1</Badge>
-        <Badge
-          variant="outline"
-          className="cursor-pointer hover:bg-white/10"
-          onClick={() => {
-            console.log("***");
-            setNewChangeLogDialog(true);
-          }}
-        >
-          <Plus /> log
-        </Badge>
-      </div>
+    <ScrollArea className="flex h-full flex-col overflow-auto p-3">
+      <div className="h-full space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold">Snippet Manager</h2>
+          <Badge variant="outline">Version 1.2</Badge>
+          <Badge
+            variant="outline"
+            className="cursor-pointer hover:bg-white/10"
+            onClick={() => {
+              setNewChangeLogDialog(true);
+            }}
+          >
+            <Plus /> log
+          </Badge>
+        </div>
 
-      <Separator />
-      <ScrollArea className="h-full">
+        <Separator />
+
         <div>
-          <h3 className="text-lg font-medium mb-2">🛠 Fixes</h3>
+          <h3 className="mb-2 text-lg font-medium">🛠 Fixes and Updates</h3>
           {isLoading ? (
             <p className="text-muted-foreground italic">No Items found</p>
           ) : (
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+            <ul className="text-muted-foreground list-inside list-disc space-y-1 text-sm">
               {loadedChangeLogs
                 .filter((log) => log.category == "fix")
                 .map((log) => (
@@ -90,11 +90,11 @@ function ChangeLogsTab() {
         </div>
 
         <div>
-          <h3 className="text-lg font-medium my-2">🐞 Known Issues</h3>
+          <h3 className="my-2 text-lg font-medium">🐞 Known Issues</h3>
           {isLoading ? (
             <p className="text-muted-foreground italic">No Items found</p>
           ) : (
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+            <ul className="text-muted-foreground list-inside list-disc space-y-1 text-sm">
               {loadedChangeLogs
                 .filter((log) => log.category == "known")
                 .map((log) => (
@@ -115,13 +115,13 @@ function ChangeLogsTab() {
         </div>
 
         <div>
-          <h3 className="text-lg font-medium my-2">
+          <h3 className="my-2 text-lg font-medium">
             🚀 Planned Features (v1.0)
           </h3>
           {isLoading ? (
             <p className="text-muted-foreground italic">No Items found</p>
           ) : (
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+            <ul className="text-muted-foreground list-inside list-disc space-y-1 text-sm">
               {loadedChangeLogs
                 .filter((log) => log.category == "planned")
                 .map((log) => (
@@ -142,10 +142,10 @@ function ChangeLogsTab() {
         </div>
 
         <div>
-          <h3 className="text-lg font-medium my-2">
+          <h3 className="my-2 text-lg font-medium">
             🤯 Planned Features (v2 & Beyond)
           </h3>
-          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <ul className="text-muted-foreground list-inside list-disc space-y-1 text-sm">
             {loadedChangeLogs
               .filter((log) => log.category == "v2-beyond")
               .map((log) => (
@@ -163,8 +163,8 @@ function ChangeLogsTab() {
               ))}
           </ul>
         </div>
-      </ScrollArea>
-    </div>
+      </div>
+    </ScrollArea>
   );
 }
 

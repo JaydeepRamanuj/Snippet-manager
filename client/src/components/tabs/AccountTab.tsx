@@ -18,16 +18,16 @@ function AccountTab() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-3">
       <h2 className="text-lg font-semibold">Account Settings</h2>
 
       <div className="space-y-2">
         <div>
-          <label className="text-sm text-muted-foreground">Username</label>
+          <label className="text-muted-foreground text-sm">Username</label>
           <div className="mt-1 text-base">{user?.username}</div>
         </div>
         <div>
-          <label className="text-sm text-muted-foreground">Email</label>
+          <label className="text-muted-foreground text-sm">Email</label>
           <div className="mt-1 text-base">
             {user?.emailAddresses[0]?.emailAddress}
           </div>
