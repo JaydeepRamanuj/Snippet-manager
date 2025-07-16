@@ -6,7 +6,6 @@ import { useSignUp } from "@clerk/clerk-react";
 import OTPInput from "./OTPInput";
 import { useAppStore } from "@/store/appStore";
 import showToast from "../common/Toast";
-import OAuthButtons from "./AuthButtons";
 
 function SignupForm({
   setVerifying,

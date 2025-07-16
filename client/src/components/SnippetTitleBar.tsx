@@ -8,7 +8,7 @@ import {
 import useAlert from "@/providers/AlertProvider";
 import type { SnippetType } from "@/types/snippetType";
 import { useAuth } from "@clerk/clerk-react";
-import { Edit, Menu, MoreVertical, Plus, Trash, X } from "lucide-react";
+import { Edit, MoreVertical, Plus, Trash, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { allowedLanguages, capitalize, isLanguage } from "@/lib/utils";
@@ -43,13 +43,8 @@ export default function SnippetTitleBar({
   const [language, setLanguage] = useState(snippet.language);
   const [folder, setFolder] = useState(snippet.folderName ?? "Index");
   const [isRenaming, setRenaming] = useState<boolean>(false);
-  const {
-    currentSnippet,
-    loadedFolders,
-    setLoadedSnippets,
-    loadedSnippets,
-    toggleSidebar,
-  } = useAppStore();
+  const { currentSnippet, loadedFolders, setLoadedSnippets, loadedSnippets } =
+    useAppStore();
   const [isSaveBadgeHover, setSaveBadgeHover] = useState<boolean>(false);
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
