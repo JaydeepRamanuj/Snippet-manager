@@ -36,7 +36,7 @@ type LanguageDropDownProps = {
   value: string;
   onUpdate: <K extends keyof SnippetType>(
     property: K,
-    value: SnippetType[K]
+    value: SnippetType[K],
   ) => void;
 };
 export function LanguageDropDown({ value, onUpdate }: LanguageDropDownProps) {
@@ -49,7 +49,7 @@ export function LanguageDropDown({ value, onUpdate }: LanguageDropDownProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-fit justify-between h-6"
+          className="h-6 w-fit justify-between"
         >
           {value
             ? languages.find((language) => language.value === value)?.label
@@ -72,7 +72,7 @@ export function LanguageDropDown({ value, onUpdate }: LanguageDropDownProps) {
                     if (isLanguage(currentValue) && isLanguage(value)) {
                       onUpdate(
                         "language",
-                        currentValue !== value ? currentValue : value
+                        currentValue !== value ? currentValue : value,
                       );
                     }
 
@@ -83,7 +83,7 @@ export function LanguageDropDown({ value, onUpdate }: LanguageDropDownProps) {
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === language.value ? "opacity-100" : "opacity-0"
+                      value === language.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

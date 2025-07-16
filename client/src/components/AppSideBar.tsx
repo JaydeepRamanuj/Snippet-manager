@@ -115,11 +115,11 @@ export function AppSidebar() {
 
   useEffect(() => {
     if (isLoaded && loadedSnippets.length == 0) {
-      getSnippets();
+      // getSnippets();
     }
 
     if (isLoaded && loadedFolders.length == 1) {
-      getFolders();
+      // getFolders();
     }
 
     setFolders(loadedFolders);
@@ -167,7 +167,7 @@ export function AppSidebar() {
     if (!invisibleDivToFindSideBarWidth.current) return;
 
     const widths = Array.from(
-      invisibleDivToFindSideBarWidth.current.children
+      invisibleDivToFindSideBarWidth.current.children,
     ).map((child) => (child as HTMLElement).offsetWidth);
 
     const maxWidth = Math.max(...widths, 500);
@@ -182,7 +182,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent className={`${open && "p-1.5"}`}>
         <SidebarGroup>
-          <SidebarGroupContent className="flex items-center flex-wrap justify-between">
+          <SidebarGroupContent className="flex flex-wrap items-center justify-between">
             <SidebarTrigger />
             <ThemeModeToggle />
             <SearchBar />
@@ -192,13 +192,13 @@ export function AppSidebar() {
           <div className="">
             <Separator />
             <div className="flex">
-              <SidebarGroup className={`w-fit pr-0 min-w-[150px]`}>
-                <SidebarGroupLabel className="flex justify-between items-center pr-3">
+              <SidebarGroup className={`w-fit min-w-[150px] pr-0`}>
+                <SidebarGroupLabel className="flex items-center justify-between pr-3">
                   <span>Folders</span>
                   <Tooltip>
                     <TooltipTrigger>
                       <Plus
-                        className="dark:text-gray-500 dark:hover:text-white/80 text-black/40 hover:text-black/80 cursor-pointer"
+                        className="cursor-pointer text-black/40 hover:text-black/80 dark:text-gray-500 dark:hover:text-white/80"
                         size={18}
                         onClick={handleAddNewFolder}
                       />
@@ -209,10 +209,10 @@ export function AppSidebar() {
                   </Tooltip>
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
-                  <ScrollArea className="flex flex-col max-h-[80vh] overflow-auto pr-3">
+                  <ScrollArea className="flex max-h-[80vh] flex-col overflow-auto pr-3">
                     {isFoldersLoading ? (
-                      <div className="flex flex-col items-center py-10 gap-4">
-                        <div className="size-6 border-2 rounded-full border-t-transparent border-white animate-spin"></div>
+                      <div className="flex flex-col items-center gap-4 py-10">
+                        <div className="size-6 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                         <span>Loading Folders</span>
                       </div>
                     ) : (
@@ -231,12 +231,12 @@ export function AppSidebar() {
               <Separator orientation="vertical" className="h-full" />
 
               <SidebarGroup className="grow pr-1">
-                <SidebarGroupLabel className="flex justify-between items-center pr-4">
+                <SidebarGroupLabel className="flex items-center justify-between pr-4">
                   <span>Files</span>
                   <Tooltip>
                     <TooltipTrigger>
                       <Plus
-                        className="dark:text-gray-500 dark:hover:text-white/80 text-black/40 hover:text-black/80 cursor-pointer"
+                        className="cursor-pointer text-black/40 hover:text-black/80 dark:text-gray-500 dark:hover:text-white/80"
                         size={18}
                         onClick={handleAddNewFile}
                       />
@@ -247,10 +247,10 @@ export function AppSidebar() {
                   </Tooltip>
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
-                  <ScrollArea className="grow flex flex-col max-h-[80vh] overflow-auto pr-4">
+                  <ScrollArea className="flex max-h-[80vh] grow flex-col overflow-auto pr-4">
                     {isSnippetsLoading ? (
-                      <div className="flex flex-col items-center py-10 gap-4">
-                        <div className="size-6 border-2 rounded-full border-t-transparent border-white animate-spin"></div>
+                      <div className="flex flex-col items-center gap-4 py-10">
+                        <div className="size-6 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                         <span>Loading Snippets</span>
                       </div>
                     ) : isCalculatingSideBarWidth ? (
@@ -271,7 +271,7 @@ export function AppSidebar() {
                         ))}
                       </div>
                     ) : snippets.length == 0 ? (
-                      <div className="text-gray-500 text-center py-6">
+                      <div className="py-6 text-center text-gray-500">
                         No snippets found
                       </div>
                     ) : (

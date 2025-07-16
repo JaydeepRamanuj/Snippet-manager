@@ -2,7 +2,7 @@ import type { ChangeLogType } from "@/types/changeLogType";
 import type { FolderType } from "@/types/folderType";
 import type { SnippetType } from "@/types/snippetType";
 import { create } from "zustand";
-
+import { createJSONStorage, persist } from "zustand/middleware";
 type SortType = "recency" | "alphabetic";
 
 interface AppState {
@@ -27,6 +27,7 @@ interface AppState {
   sideBarWidth: number;
   recentSnippets: string[];
   currentSettingsTab: string;
+  shownDesktopOptimizedDialog: boolean;
 
   toggleSidebar: () => void;
   setEditingMode: (value: boolean) => void;
@@ -51,84 +52,100 @@ interface AppState {
   addToRecentSnippets: (value: string) => void;
   setSettingsDialog: (value: boolean) => void;
   setCurrentSettingsTab: (value: string) => void;
+  setDesktopOptimizedDialog: (value: boolean) => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
-  isSidebarCollapsed: false,
-  isEditingMode: false,
-  isReadingMode: true,
-  isLoading: false,
-  showNewFolderDialog: false,
-  showNewFileDialog: false,
-  showNewChangeLogDialog: false,
-  showAuthDialog: false,
-  showSearchDialog: false,
-  showSettingsDialog: false,
-  sortType: "recency",
-  filteringTags: [],
-  alertDialogMessage: "",
-  currentSnippet: {
-    _id: "",
-    createdAt: "",
-    language: "javascript",
-    lastUpdatedOn: "",
-    title: "Untitled",
-    userId: "",
-    code: "// Namaste World 🙏",
-    folderName: "Index",
-    note: "<p>Write your comments here...</p>",
-    tags: [],
-  },
-  currentFolder: "index",
-  loadedSnippets: [],
-  loadedFolders: [
-    {
-      _id: "index",
-      name: "Index",
-      userId: "app",
-    },
-  ],
-  loadedChangeLogs: [],
-  sideBarWidth: 500,
-  recentSnippets: [],
-  currentSettingsTab: "account",
+export const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      isSidebarCollapsed: false,
+      isEditingMode: false,
+      isReadingMode: true,
+      isLoading: false,
+      showNewFolderDialog: false,
+      showNewFileDialog: false,
+      showNewChangeLogDialog: false,
+      showAuthDialog: false,
+      showSearchDialog: false,
+      showSettingsDialog: false,
+      sortType: "recency",
+      filteringTags: [],
+      alertDialogMessage: "",
+      currentSnippet: {
+        _id: "",
+        createdAt: "",
+        language: "javascript",
+        lastUpdatedOn: "",
+        title: "Untitled",
+        userId: "",
+        code: "// Namaste World 🙏",
+        folderName: "Index",
+        note: "<p>Write your comments here...</p>",
+        tags: [],
+      },
+      currentFolder: "index",
+      loadedSnippets: [],
+      loadedFolders: [
+        {
+          _id: "index",
+          name: "Index",
+          userId: "app",
+        },
+      ],
+      loadedChangeLogs: [],
+      sideBarWidth: 500,
+      recentSnippets: [],
+      currentSettingsTab: "account",
+      shownDesktopOptimizedDialog: true,
 
-  toggleSidebar: () =>
-    set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
-  setEditingMode: (value) => set({ isEditingMode: value }),
-  setReadingMode: (value) => set({ isReadingMode: value }),
-  setLoading: (value) => set({ isLoading: value }),
-  setSortType: (type) => set({ sortType: type }),
-  setSearchDialog: (value) => set({ showSearchDialog: value }),
-  setFilteringTags: (tags) => set({ filteringTags: tags }),
-  setNewFolderDialog: (value) => set({ showNewFolderDialog: value }),
-  setNewFileDialog: (value) => set({ showNewFileDialog: value }),
-  setNewChangeLogDialog: (value) => set({ showNewChangeLogDialog: value }),
-  setAuthDialog: (value) => set({ showAuthDialog: value }),
-  setSettingsDialog: (value) => set({ showSettingsDialog: value }),
-  setAlertDialogMessage: (str) => set({ alertDialogMessage: str }),
-  setCurrentSnippet: (snippet) => set({ currentSnippet: snippet }),
-  setCurrentFolder: (folderId) => set({ currentFolder: folderId }),
-  setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
-  setLoadedFolders: (folders) => set({ loadedFolders: folders }),
-  setLoadedChangeLogs: (changelogs) => set({ loadedChangeLogs: changelogs }),
-  setSideBarWidth: (value) => set({ sideBarWidth: value }),
-  setCurrentSettingsTab: (value) => set({ currentSettingsTab: value }),
-  addTag: (tag) =>
-    set((state) => ({
-      filteringTags: [...new Set([...state.filteringTags, tag])],
-    })),
-  removeTag: (tag) =>
-    set((state) => ({
-      filteringTags: state.filteringTags.filter((t) => t !== tag),
-    })),
-  addToRecentSnippets: (value) =>
-    set((state) => {
-      const recent10Snippets = [
-        ...new Set([value, ...state.recentSnippets]),
-      ].slice(0, 10);
-      return {
-        recentSnippets: recent10Snippets,
-      };
+      toggleSidebar: () =>
+        set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
+      setEditingMode: (value) => set({ isEditingMode: value }),
+      setReadingMode: (value) => set({ isReadingMode: value }),
+      setLoading: (value) => set({ isLoading: value }),
+      setSortType: (type) => set({ sortType: type }),
+      setSearchDialog: (value) => set({ showSearchDialog: value }),
+      setFilteringTags: (tags) => set({ filteringTags: tags }),
+      setNewFolderDialog: (value) => set({ showNewFolderDialog: value }),
+      setNewFileDialog: (value) => set({ showNewFileDialog: value }),
+      setNewChangeLogDialog: (value) => set({ showNewChangeLogDialog: value }),
+      setAuthDialog: (value) => set({ showAuthDialog: value }),
+      setSettingsDialog: (value) => set({ showSettingsDialog: value }),
+      setAlertDialogMessage: (str) => set({ alertDialogMessage: str }),
+      setCurrentSnippet: (snippet) => set({ currentSnippet: snippet }),
+      setCurrentFolder: (folderId) => set({ currentFolder: folderId }),
+      setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
+      setLoadedFolders: (folders) => set({ loadedFolders: folders }),
+      setLoadedChangeLogs: (changelogs) =>
+        set({ loadedChangeLogs: changelogs }),
+      setSideBarWidth: (value) => set({ sideBarWidth: value }),
+      setCurrentSettingsTab: (value) => set({ currentSettingsTab: value }),
+      setDesktopOptimizedDialog: (value) =>
+        set({ shownDesktopOptimizedDialog: value }),
+      addTag: (tag) =>
+        set((state) => ({
+          filteringTags: [...new Set([...state.filteringTags, tag])],
+        })),
+      removeTag: (tag) =>
+        set((state) => ({
+          filteringTags: state.filteringTags.filter((t) => t !== tag),
+        })),
+      addToRecentSnippets: (value) =>
+        set((state) => {
+          const recent10Snippets = [
+            ...new Set([value, ...state.recentSnippets]),
+          ].slice(0, 10);
+          return {
+            recentSnippets: recent10Snippets,
+          };
+        }),
     }),
-}));
+    {
+      name: "snippet-manager-app-storage",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        shownDesktopOptimizedDialog: state.shownDesktopOptimizedDialog,
+      }),
+    },
+  ),
+);

@@ -24,6 +24,9 @@ export function CommandMenu() {
   useHotkey("Ctrl+p", () => {
     setSearchDialog(true);
   });
+  useHotkey("Ctrl+k", () => {
+    setSearchDialog(true);
+  });
 
   const [recentItems, setRecentItems] = useState<
     {
@@ -39,11 +42,11 @@ export function CommandMenu() {
   const items = useMemo(() => {
     const snippets = inpVal
       ? loadedSnippets.filter((snippet) =>
-          snippet.title.toLowerCase().includes(inpVal.toLowerCase())
+          snippet.title.toLowerCase().includes(inpVal.toLowerCase()),
         )
       : recentSnippets.length > 0
-      ? loadedSnippets.filter((s) => recentSnippets.includes(s._id))
-      : loadedSnippets.slice(0, 10);
+        ? loadedSnippets.filter((s) => recentSnippets.includes(s._id))
+        : loadedSnippets.slice(0, 10);
 
     return snippets.map((snippet) => ({
       id: snippet._id,
@@ -59,7 +62,7 @@ export function CommandMenu() {
   const handleClick = (value: string) => {
     // console.log("value =>", value);
     const selectedSnippet = loadedSnippets.find(
-      (snippet) => snippet._id === value
+      (snippet) => snippet._id === value,
     );
     if (selectedSnippet) {
       setCurrentSnippet(selectedSnippet);
@@ -86,8 +89,8 @@ export function CommandMenu() {
             inpVal.length > 0
               ? "Search Result"
               : recentSnippets.length > 0
-              ? "Recent snippets"
-              : "More snippets"
+                ? "Recent snippets"
+                : "More snippets"
           } `}
         >
           {recentItems &&
@@ -98,9 +101,9 @@ export function CommandMenu() {
                   handleClick(item.id);
                 }}
               >
-                <div className="w-full flex items-center justify-between">
+                <div className="flex w-full items-center justify-between">
                   <span>{item.name}</span>
-                  <span className="text-xs ml-3 text-gray-400 flex items-center gap-2">
+                  <span className="ml-3 flex items-center gap-2 text-xs text-gray-400">
                     <Folder /> {item.folderName}
                   </span>
                 </div>

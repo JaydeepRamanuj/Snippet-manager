@@ -55,7 +55,7 @@ function FolderCard({ id, name }: { id: string; name: string }) {
 
         const response = await fetch(
           `${backendURL}/api/folders/${id}`,
-          options
+          options,
         );
 
         if (response.ok) {
@@ -92,15 +92,14 @@ function FolderCard({ id, name }: { id: string; name: string }) {
         <ContextMenuTrigger>
           {open ? (
             <Card
-              className={` p-0 rounded-md cursor-pointer   mb-2 group relative 
-                ${
-                  currentFolder === id
-                    ? "text-blue-600 bg-blue-50 dark:text-white  dark:bg-white/10"
-                    : "dark:hover:bg-white/5 hover:bg-black/5 dark:text-gray-300 dark:hover:text-gray-100"
-                }`}
+              className={`group relative mb-2 cursor-pointer rounded-md p-0 ${
+                currentFolder === id
+                  ? "bg-blue-50 text-blue-600 dark:bg-white/10 dark:text-white"
+                  : "hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-100"
+              }`}
               onClick={handleClick}
             >
-              <CardContent className="p-1.5 px-2 flex items-center justify-start gap-2">
+              <CardContent className="flex items-center justify-start gap-2 p-1.5 px-2">
                 {!renaming && currentFolder === id ? (
                   <FolderOpen size={16} />
                 ) : (

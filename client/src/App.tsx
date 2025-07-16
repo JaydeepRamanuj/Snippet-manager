@@ -7,7 +7,7 @@ import { CommandMenu } from "./components/CommandMenu";
 import { ThemeProvider } from "./providers/themeProvider";
 import MainPage from "./pages/MainPage";
 import { TooltipProvider } from "./components/ui/tooltip";
-import Dialogs from "./components/Dialogs";
+import Dialogs from "./dialogs/Dialogs";
 import { Shortcuts } from "./components/Shortcut";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { Toaster } from "@/components/ui/sonner";

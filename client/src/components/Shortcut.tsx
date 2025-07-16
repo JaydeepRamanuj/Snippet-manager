@@ -15,7 +15,7 @@ export function Shortcuts() {
   const { setSettingsDialog } = useAppStore();
 
   useHotkey("Ctrl+Shift+l", () => {
-    console.log("Inside theme change shortcut");
+    // console.log("Inside theme change shortcut");
     if (theme == "dark") {
       setTheme("light");
     }
@@ -24,7 +24,7 @@ export function Shortcuts() {
     }
   });
   useHotkey("Ctrl+,", () => {
-    console.log("Inside setting dialog shortcut");
+    // console.log("Inside setting dialog shortcut");
     setSettingsDialog(true);
   });
 

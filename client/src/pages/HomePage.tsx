@@ -2,14 +2,14 @@ import { AppSidebar } from "@/components/AppSideBar";
 import MainPage from "./MainPage";
 import { CommandMenu } from "@/components/CommandMenu";
 import { Shortcuts } from "@/components/Shortcut";
-import Dialogs from "@/components/Dialogs";
+import Dialogs from "@/dialogs/Dialogs";
 import { Toaster } from "sonner";
 
 function HomePage() {
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex h-screen w-full">
       <AppSidebar />
-      <main className="grow overflow-auto ">
+      <main className="grow overflow-auto">
         <MainPage />
         <CommandMenu />
         <Shortcuts />

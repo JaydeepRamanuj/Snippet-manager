@@ -37,7 +37,7 @@ export function FolderDropDown({ value, onUpdate }: FolderDropDownProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-fit justify-between h-9"
+          className="h-9 w-fit justify-between"
         >
           {value
             ? folderList.find((folder) => folder.name === value)?.name
@@ -64,7 +64,7 @@ export function FolderDropDown({ value, onUpdate }: FolderDropDownProps) {
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === folder.name ? "opacity-100" : "opacity-0"
+                      value === folder.name ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

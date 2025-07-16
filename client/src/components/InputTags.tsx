@@ -22,14 +22,14 @@ export function InputTags({
     setValue("");
   };
   return (
-    <div className="flex flex-wrap gap-1 border rounded px-2 py-1 mt-2">
+    <div className="mt-2 flex flex-wrap gap-1 rounded border px-2 py-1">
       {tags.map((tag, i) => (
         <Badge key={i} variant="outline" className="flex items-center">
           {tag}
-          <span className="size-4 rounded-full bg-white/20 flex justify-center items-center">
+          <span className="flex size-4 items-center justify-center rounded-full bg-white/20">
             <X
               size={10}
-              className=" cursor-pointer text-white"
+              className="cursor-pointer text-white"
               onClick={() => {
                 console.log("clicked");
                 setTags(tags.filter((t) => t !== tag));
@@ -39,7 +39,7 @@ export function InputTags({
         </Badge>
       ))}
       <Input
-        className="border-none p-0 h-6 w-auto flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-2 rounded-xs"
+        className="h-6 w-auto flex-1 rounded-xs border-none p-0 pl-2 focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="Add tag..."
         value={value}
         onChange={(e) => setValue(e.target.value)}

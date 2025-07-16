@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { InputTags } from "./InputTags";
+import { InputTags } from "../components/InputTags";
 import { useAppStore } from "@/store/appStore";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import type { SnippetType } from "@/types/snippetType";
@@ -19,8 +19,8 @@ import {
   formatDateToIndianStyle,
   isLanguage,
 } from "@/lib/utils";
-import { CustomDropDown } from "./common/customDropDown";
-import showToast from "./common/Toast";
+import { CustomDropDown } from "../components/common/customDropDown";
+import showToast from "../components/common/Toast";
 
 export function NewSnippetDialog() {
   const { showNewFileDialog, setNewFileDialog, loadedFolders } = useAppStore();

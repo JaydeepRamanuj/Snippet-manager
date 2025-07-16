@@ -3,7 +3,7 @@ import type { ChangeLogType } from "@/types/changeLogType";
 
 export default function ChangeLogItem(log: ChangeLogType) {
   return (
-    <div className="rounded-xl border bg-background p-2 shadow-sm space-y-2">
+    <div className="bg-background space-y-2 rounded-xl border p-2 shadow-sm">
       <div className="flex items-center justify-between">
         <h3 className="text-md font-bold">{log.title}</h3>
         <div className="flex items-center gap-2">
@@ -12,8 +12,8 @@ export default function ChangeLogItem(log: ChangeLogType) {
               log.status == "completed"
                 ? "text-green-300/60"
                 : log.status == "in-process"
-                ? "text-gray-500"
-                : "text-orange-400/60"
+                  ? "text-gray-500"
+                  : "text-orange-400/60"
             }`}
           >
             {log.status === "in-process" && "In Process"}
@@ -25,10 +25,10 @@ export default function ChangeLogItem(log: ChangeLogType) {
       </div>
 
       {log.description && (
-        <p className="mt-3 text-sm text-muted-foreground">{log.description}</p>
+        <p className="text-muted-foreground mt-3 text-sm">{log.description}</p>
       )}
 
-      <div className="text-xs text-muted-foreground flex justify-between pt-2 border-t">
+      <div className="text-muted-foreground flex justify-between border-t pt-2 text-xs">
         <span>🛠 by {log.author}</span>
         {log.timestamp && <span>🕒 {log.timestamp}</span>}
       </div>

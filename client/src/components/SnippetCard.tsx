@@ -29,7 +29,7 @@ function SnippetCard({
     if (loadedSnippets) {
       if (currentSnippet._id === _id) return;
       const newCurrentSnippet = loadedSnippets.find(
-        (snippet) => snippet._id === _id
+        (snippet) => snippet._id === _id,
       );
       if (newCurrentSnippet) {
         setCurrentSnippet(newCurrentSnippet);
@@ -40,35 +40,35 @@ function SnippetCard({
 
   return (
     <Card
-      className={`w-full border border-gray-400/30 rounded-lg py-2 px-3 cursor-pointer mb-2 ${
+      className={`mb-2 w-full cursor-pointer rounded-lg border border-gray-400/30 px-3 py-2 ${
         currentSnippet._id === _id
-          ? "bg-blue-50  dark:bg-white/10"
+          ? "bg-blue-50 dark:bg-white/10"
           : "hover:bg-black/5 dark:hover:bg-white/5"
       }`}
       onClick={handleClick}
     >
-      <CardContent className="p-0 flex flex-col gap-2 ">
-        <h3 className="flex justify-between flex-wrap gap-2">
+      <CardContent className="flex flex-col gap-2 p-0">
+        <h3 className="flex flex-wrap justify-between gap-2">
           <span>{title}</span>
-          <span className="text-gray-500/60 text-xs dark:text-gray-300/60">
+          <span className="text-xs text-gray-500/60 dark:text-gray-300/60">
             {language}
           </span>
         </h3>
-        <div className="flex items-center gap-3  flex-wrap">
+        <div className="flex flex-wrap items-center gap-3">
           {tags &&
             tags.map((tag, i) => (
               <Badge
                 key={i}
                 variant={"outline"}
-                className="dark:hover:bg-white/10 hover:bg-black/5"
+                className="hover:bg-black/5 dark:hover:bg-white/10"
               >
                 {tag}
               </Badge>
             ))}
         </div>
-        <div className="flex justify-between text-xs flex-wrap text-gray-500/60  dark:text-gray-300/60 gap-2">
+        <div className="flex flex-wrap justify-between gap-2 text-xs text-gray-500/60 dark:text-gray-300/60">
           {folderName && (
-            <span className="flex gap-2 items-center">
+            <span className="flex items-center gap-2">
               <Folder size={12} />
               <span>{folderName}</span>
             </span>

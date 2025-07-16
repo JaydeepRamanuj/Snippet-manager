@@ -27,7 +27,7 @@ function CodeEditor({ snippet, onChange }: CodeEditorProps) {
   const context = useTheme();
 
   return (
-    <div className="p-3 h-full rounded-lg shadow-lg bg-accent">
+    <div className="bg-accent h-full rounded-lg p-3 shadow-lg">
       <Editor
         defaultLanguage="javascript"
         language={snippet.language}

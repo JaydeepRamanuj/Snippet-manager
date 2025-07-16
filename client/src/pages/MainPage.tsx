@@ -8,7 +8,7 @@ import { GripHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { useHotkey } from "@/hooks/useHotKeys";
-import { SettingsDialog } from "@/components/SettingsDialog";
+import { SettingsDialog } from "@/dialogs/SettingsDialog";
 import showToast from "@/components/common/Toast";
 
 function MainPage() {
@@ -45,7 +45,7 @@ function MainPage() {
         setIsLoading(true);
         const response = await fetch(
           `${backendURL}/api/snippets/${currentSnippet._id}`,
-          options
+          options,
         );
 
         if (response.ok) {
@@ -91,7 +91,7 @@ function MainPage() {
 
   const handleSnippetUpdate = <K extends keyof SnippetType>(
     property: K,
-    value: SnippetType[K]
+    value: SnippetType[K],
   ) => {
     setIsSnippetDetailsUpdated(true);
     if (currentSnippet[property] === value) return;
@@ -105,7 +105,7 @@ function MainPage() {
       setCurrentSnippet({ ...temp, [property]: value });
     } else {
       const folderId = loadedFolders.find(
-        (folder) => folder.name == value
+        (folder) => folder.name == value,
       )?._id;
 
       // Add folderId if folderName other than Index
@@ -193,7 +193,7 @@ function MainPage() {
       console.log("currentSnippet._id =>", currentSnippet._id);
       const response = await fetch(
         `${backendURL}/api/snippets/${currentSnippet._id}`,
-        options
+        options,
       );
 
       if (response.ok) {
@@ -226,7 +226,7 @@ function MainPage() {
   // const handleTagSearch = () => {};
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex h-full flex-col">
       <SnippetTitleBar
         snippet={currentSnippet}
         isUpdated={isSnippetDetailsUpdated}
@@ -240,7 +240,7 @@ function MainPage() {
             <CodeEditor snippet={currentSnippet} onChange={handleCodeChange} />
           )}
         </Panel>
-        <PanelResizeHandle className=" my-1 border dark:hover:bg-white/10 hover:bg-black/5 flex justify-center items-center dark:text-gray-600 dark:hover:text-gray-300 transition-all rounded-full">
+        <PanelResizeHandle className="my-1 flex items-center justify-center rounded-full border transition-all hover:bg-black/5 dark:text-gray-600 dark:hover:bg-white/10 dark:hover:text-gray-300">
           <GripHorizontal size={12} />
         </PanelResizeHandle>
         <Panel defaultSize={30} minSize={20}>

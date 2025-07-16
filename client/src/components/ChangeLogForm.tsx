@@ -45,7 +45,7 @@ const NewChangeLogDialog = () => {
   // Used 'Key-value dependent types' patterns, read notes for more details
   const handleChange = <K extends keyof Omit<ChangeLogType, "_id">>(
     key: K,
-    value: Omit<ChangeLogType, "_id">[K]
+    value: Omit<ChangeLogType, "_id">[K],
   ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
@@ -102,11 +102,11 @@ const NewChangeLogDialog = () => {
 
   return (
     <Dialog open={showNewChangeLogDialog} onOpenChange={setNewChangeLogDialog}>
-      <DialogContent className="w-fit ">
+      <DialogContent className="w-fit">
         <DialogHeader>
           <DialogTitle>
             <span>Create New changeLog</span>
-            <span className="text-orange-300/80 mt-2 text-xs">
+            <span className="mt-2 text-xs text-orange-300/80">
               This feature will only be available to admin in future
             </span>
           </DialogTitle>
@@ -130,7 +130,7 @@ const NewChangeLogDialog = () => {
             />
           </div>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex flex-wrap gap-3">
             <div className="space-y-1">
               <Label>Category</Label>
               <Select

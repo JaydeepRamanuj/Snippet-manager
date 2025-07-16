@@ -12,27 +12,27 @@ export default function SearchBar({ onFocus }: { onFocus?: () => void }) {
     <>
       {open ? (
         <div
-          className="grow relative ml-auto max-w-[70%]"
+          className="relative ml-auto max-w-[70%] grow"
           onClick={() => {
             setSearchDialog(true);
           }}
         >
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
 
           <Input
             type="search"
             placeholder="Search snippets..."
             onFocus={onFocus}
-            className="pl-10 pr-20 h-9 text-sm"
+            className="h-9 pr-20 pl-10 text-sm"
           />
 
-          <div className="pointer-events-none absolute right-3 top-1.5 hidden sm:flex items-center gap-1 text-xs text-muted-foreground border rounded px-1.5 py-0.5">
-            <Command className="h-3 w-3" />p
+          <div className="text-muted-foreground pointer-events-none absolute top-1.5 right-3 hidden items-center gap-1 rounded border px-1.5 py-0.5 text-xs sm:flex">
+            <Command className="h-3 w-3" />k
           </div>
         </div>
       ) : (
         <Button size="icon" variant="outline">
-          <Search className=" h-4 w-4" />
+          <Search className="h-4 w-4" />
         </Button>
       )}
     </>

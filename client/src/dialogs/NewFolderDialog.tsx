@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useAppStore } from "@/store/appStore";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import type { FolderType } from "@/types/folderType";
-import showToast from "./common/Toast";
+import showToast from "../components/common/Toast";
 
 export function NewFolderDialog() {
   const { showNewFolderDialog, setNewFolderDialog } = useAppStore();

@@ -47,7 +47,7 @@ export function CustomDropDown({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={`w-fit justify-between ${
+          className={`w-full justify-between sm:w-fit ${
             variant == "xs" ? "h-6" : variant == "md" ? "h-9" : "h-10"
           } `}
         >
@@ -61,7 +61,7 @@ export function CustomDropDown({
         <Command>
           <CommandInput
             placeholder={`Search ${title}...`}
-            className={` p-1 ${variant == "xs" ? "h-4" : "h-6"} `}
+            className={`p-1 ${variant == "xs" ? "h-4" : "h-6"} `}
           />
           <CommandList>
             <CommandEmpty>No {title} found.</CommandEmpty>
@@ -80,7 +80,7 @@ export function CustomDropDown({
                   <Check
                     className={cn(
                       "ml-auto",
-                      selected === item.value ? "opacity-100" : "opacity-0"
+                      selected === item.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

@@ -51,7 +51,7 @@ function UserDropdown() {
             setSettingsDialog(true);
           }}
         >
-          <User className="w-4 h-4 mr-2" />
+          <User className="mr-2 h-4 w-4" />
           Profile
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -60,7 +60,7 @@ function UserDropdown() {
             setSettingsDialog(true);
           }}
         >
-          <Settings className="w-4 h-4 mr-2" />
+          <Settings className="mr-2 h-4 w-4" />
           Settings
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -69,7 +69,7 @@ function UserDropdown() {
             setSettingsDialog(true);
           }}
         >
-          <Keyboard className="w-4 h-4 mr-2" />
+          <Keyboard className="mr-2 h-4 w-4" />
           Shortcuts
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -78,7 +78,7 @@ function UserDropdown() {
             setSettingsDialog(true);
           }}
         >
-          <Wrench className="w-4 h-4 mr-2" />
+          <Wrench className="mr-2 h-4 w-4" />
           Change Logs
         </DropdownMenuItem>
 
@@ -88,7 +88,7 @@ function UserDropdown() {
             setSettingsDialog(true);
           }}
         >
-          <Megaphone className="w-4 h-4 mr-2" />
+          <Megaphone className="mr-2 h-4 w-4" />
           What's new
         </DropdownMenuItem>
 
@@ -96,12 +96,12 @@ function UserDropdown() {
 
         {isSignedIn ? (
           <DropdownMenuItem onClick={handleSignOut}>
-            <LogOut className="w-4 h-4 mr-2" />
+            <LogOut className="mr-2 h-4 w-4" />
             Logout
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem onClick={() => setAuthDialog(true)}>
-            <LogIn className="w-4 h-4 mr-2" />
+            <LogIn className="mr-2 h-4 w-4" />
             Sign in
           </DropdownMenuItem>
         )}
