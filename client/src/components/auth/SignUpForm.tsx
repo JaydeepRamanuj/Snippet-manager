@@ -1,4 +1,3 @@
-import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Eye, EyeClosed, Loader2 } from "lucide-react";
@@ -7,6 +6,7 @@ import { useSignUp } from "@clerk/clerk-react";
 import OTPInput from "./OTPInput";
 import { useAppStore } from "@/store/appStore";
 import showToast from "../common/Toast";
+import OAuthButtons from "./AuthButtons";
 
 function SignupForm({
   setVerifying,
@@ -110,51 +110,57 @@ function SignupForm({
     );
   }
   return (
-    <form onSubmit={handleSignup} className="flex flex-col gap-3">
-      <Input
-        type="test"
-        placeholder="Username"
-        required
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <Input
-        type="email"
-        placeholder="Email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <div className="flex gap-3">
+    <div>
+      <form onSubmit={handleSignup} className="flex flex-col gap-3">
         <Input
-          type={showPass ? "text" : "password"}
-          placeholder="Password"
+          type="test"
+          placeholder="Username"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowPass((prev) => !prev);
-          }}
-        >
-          {showPass ? <EyeClosed /> : <Eye />}
+        <Input
+          type="email"
+          placeholder="Email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <div className="flex gap-3">
+          <Input
+            type={showPass ? "text" : "password"}
+            placeholder="Password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowPass((prev) => !prev);
+            }}
+          >
+            {showPass ? <EyeClosed /> : <Eye />}
+          </Button>
+        </div>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        <div id="clerk-captcha" />
+
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+          Sign up
         </Button>
+      </form>
+      <div className="flex items-center my-6">
+        <div className="flex-grow border-t border-gray-300"></div>
+        <span className="mx-4 text-sm text-gray-500 font-medium">OR</span>
+        <div className="flex-grow border-t border-gray-300"></div>
       </div>
-      {error && <p className="text-sm text-red-500">{error}</p>}
-      <div id="clerk-captcha" />
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-        Sign up
-      </Button>
-
-      <Separator />
-      {/* <OAuthButtons /> */}
-    </form>
+      <OAuthButtons />
+    </div>
   );
 }
 

@@ -12,14 +12,18 @@ import { Shortcuts } from "./components/Shortcut";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { Toaster } from "@/components/ui/sonner";
 import { AlertProvider } from "./providers/AlertProvider";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import SSOPage from "./pages/SSOPage";
 
 function App() {
+  const CLERK_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
   useEffect(() => {
     window.addEventListener("keydown", handleGlobalKeydown);
     return () => window.removeEventListener("keydown", handleGlobalKeydown);
   }, []);
 
-  const CLERK_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
   return (
     <>
       <ClerkProvider publishableKey={CLERK_KEY}>
@@ -27,17 +31,12 @@ function App() {
           <TooltipProvider>
             <SidebarProvider>
               <AlertProvider>
-                <div className="flex  w-full h-screen">
-                  <AppSidebar />
-
-                  <main className="grow  overflow-auto ">
-                    <MainPage />
-                    <CommandMenu />
-                    <Shortcuts />
-                    <Dialogs />
-                    <Toaster position="top-center" />
-                  </main>
-                </div>
+                <Router>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/sso-callback" element={<SSOPage />} />
+                  </Routes>
+                </Router>
               </AlertProvider>
             </SidebarProvider>
           </TooltipProvider>
