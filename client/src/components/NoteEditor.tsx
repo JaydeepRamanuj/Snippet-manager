@@ -1,4 +1,4 @@
-import { SimpleEditor } from "./tiptap-templates/simple/simple-editor";
+import { SimpleEditor } from "./tiptap/tiptap-templates/simple/simple-editor";
 import type { SnippetType } from "@/types/snippetType";
 
 type NoteEditorProps = {
