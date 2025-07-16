@@ -76,7 +76,7 @@ function LoginForm({ onForgotPassword }: LoginFormProps) {
           </Button>
         </div>
         <span
-          className="block text-end text-sm text-muted-foreground hover:underline cursor-pointer hover:text-white transition duration-300"
+          className="text-muted-foreground block cursor-pointer text-end text-sm transition duration-300 hover:text-white hover:underline"
           onClick={() => {
             onForgotPassword(true);
           }}
@@ -86,16 +86,16 @@ function LoginForm({ onForgotPassword }: LoginFormProps) {
         {error && <p className="text-sm text-red-500">{error}</p>}
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
           Log in
         </Button>
       </form>
-      <div className="flex items-center my-6">
+      {/* <div className="my-6 flex items-center">
         <div className="flex-grow border-t border-gray-300"></div>
-        <span className="mx-4 text-sm text-gray-500 font-medium">OR</span>
+        <span className="mx-4 text-sm font-medium text-gray-500">OR</span>
         <div className="flex-grow border-t border-gray-300"></div>
-      </div>
-      <OAuthButtons />
+      </div> */}
+      {/* <OAuthButtons /> */}
     </div>
   );
 }

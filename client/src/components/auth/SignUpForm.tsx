@@ -149,17 +149,17 @@ function SignupForm({
         <div id="clerk-captcha" />
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
           Sign up
         </Button>
       </form>
-      <div className="flex items-center my-6">
+      {/* <div className="my-6 flex items-center">
         <div className="flex-grow border-t border-gray-300"></div>
-        <span className="mx-4 text-sm text-gray-500 font-medium">OR</span>
+        <span className="mx-4 text-sm font-medium text-gray-500">OR</span>
         <div className="flex-grow border-t border-gray-300"></div>
-      </div>
+      </div> */}
 
-      <OAuthButtons />
+      {/* <OAuthButtons /> */}
     </div>
   );
 }

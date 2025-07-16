@@ -115,11 +115,11 @@ export function AppSidebar() {
 
   useEffect(() => {
     if (isLoaded && loadedSnippets.length == 0) {
-      // getSnippets();
+      getSnippets();
     }
 
     if (isLoaded && loadedFolders.length == 1) {
-      // getFolders();
+      getFolders();
     }
 
     setFolders(loadedFolders);
