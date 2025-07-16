@@ -189,8 +189,6 @@ export function AppSidebar() {
     setIsCalculatingSideBarWidth(false);
   }, [, isCalculatingSideBarWidth, snippets]);
 
-  console.log("openFolders =>", openFolders);
-
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className={`${open && "p-1.5"}`}>
