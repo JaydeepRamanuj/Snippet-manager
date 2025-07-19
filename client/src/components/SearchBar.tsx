@@ -27,7 +27,7 @@ export default function SearchBar({ onFocus }: { onFocus?: () => void }) {
           />
 
           <div className="text-muted-foreground pointer-events-none absolute top-1.5 right-3 hidden items-center gap-1 rounded border px-1.5 py-0.5 text-xs sm:flex">
-            <Command className="h-3 w-3" />k
+            Ctrl + k
           </div>
         </div>
       ) : (

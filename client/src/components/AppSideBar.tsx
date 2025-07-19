@@ -48,7 +48,7 @@ export function AppSidebar() {
   const [isSnippetsLoading, setIsSnippetsLoading] = useState(false);
   const [isFoldersLoading, setIsFoldersLoading] = useState(false);
   const [isCalculatingSideBarWidth, setIsCalculatingSideBarWidth] =
-    useState(true);
+    useState(false);
 
   const invisibleDivToFindSideBarWidth = useRef<HTMLDivElement>(null);
   const handleAddNewFolder = () => setNewFolderDialog(true);
@@ -90,10 +90,10 @@ export function AppSidebar() {
         // console.log("result =>", result);
         setSnippets(result);
         setLoadedSnippets(result);
-        setIsSnippetsLoading(false);
       }
     } catch (error) {
       console.log("Error getting snippets", error);
+    } finally {
       setIsSnippetsLoading(false);
     }
   };
@@ -117,24 +117,24 @@ export function AppSidebar() {
         setFolders([...loadedFolders, ...result]);
         setLoadedFolders([...loadedFolders, ...result]);
       }
-      setIsFoldersLoading(false);
     } catch (error) {
       console.log("Error getting folders", error);
+    } finally {
       setIsFoldersLoading(false);
     }
   };
 
   useEffect(() => {
-    if (isLoaded && loadedSnippets.length == 0) {
+    if (isLoaded) {
       getSnippets();
     }
 
-    if (isLoaded && loadedFolders.length == 1) {
+    if (isLoaded) {
       getFolders();
     }
 
     setFolders(loadedFolders);
-  }, [user?.id, loadedFolders]);
+  }, [user?.id]);
 
   const currentFolderSnippets = useMemo(() => {
     return currentFolder == "index"
