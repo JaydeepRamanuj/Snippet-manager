@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { Command } from "lucide-react";
 import { Search } from "lucide-react";
 import { useSidebar } from "./ui/sidebar";
 import { Button } from "./ui/button";

@@ -100,7 +100,7 @@ export default function SnippetTitleBar({
   };
 
   const handleTagClick = (value: string) => {
-    // console.log(value);
+    console.log(value);
   };
 
   const handleTagRemove = async (value: string) => {
