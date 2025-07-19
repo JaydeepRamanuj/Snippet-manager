@@ -38,8 +38,6 @@ const ForgotPasswordPage = () => {
 
   // Send the password reset code to the user's email
   const sendOTP = async (e: React.FormEvent) => {
-    console.log("sendOTP()");
-
     e.preventDefault();
     try {
       await signIn?.create({
@@ -57,7 +55,6 @@ const ForgotPasswordPage = () => {
   //   This is just filler function
   const getOTP = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("getOTPInput");
     if (code.length == 6) {
       setProcessStage("getNewPasswordAndReset");
     }
@@ -67,9 +64,6 @@ const ForgotPasswordPage = () => {
   // Upon successful reset, the user will be
   // signed in and redirected to the home page
   const resetPassword = async (e: React.FormEvent) => {
-    console.log("resetPassword()");
-    console.log("code =>", code);
-    console.log("password =>", password);
     e.preventDefault();
 
     if (password != confPassword) {
@@ -106,16 +100,16 @@ const ForgotPasswordPage = () => {
         {processStage == "getEmailAndSendOTP"
           ? "Forgot Password?"
           : processStage == "verifyOTP"
-          ? "Verify OTP"
-          : "Set new Password"}
+            ? "Verify OTP"
+            : "Set new Password"}
       </h1>
       <form
         onSubmit={
           processStage == "getEmailAndSendOTP"
             ? sendOTP
             : processStage == "verifyOTP"
-            ? getOTP
-            : resetPassword
+              ? getOTP
+              : resetPassword
         }
       >
         {processStage == "getEmailAndSendOTP" && (
@@ -152,7 +146,7 @@ const ForgotPasswordPage = () => {
                 <InputOTPSlot index={5} />
               </InputOTPGroup>
             </InputOTP>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-muted-foreground text-sm">
               Please enter the one-time password sent to your email id.
             </span>
             <Button className="mt-4">Verify</Button>
@@ -201,7 +195,7 @@ const ForgotPasswordPage = () => {
 
             <Button className="mt-4" disabled={isLoading}>
               {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
               {isLoading ? "Resetting" : "Reset"}
             </Button>

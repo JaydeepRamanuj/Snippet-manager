@@ -28,7 +28,7 @@ function OAuthButtons() {
       //   type: "success",
       // });
     } catch (error) {
-      console.log("Error signing in", error);
+      // console.log("Error signing in", error);
       showToast({
         msg: `Error signing in`,
         type: "error",
@@ -37,14 +37,14 @@ function OAuthButtons() {
   };
 
   return (
-    <div className="flex flex-col gap-2 mt-2">
+    <div className="mt-2 flex flex-col gap-2">
       <Button
         variant="outline"
         onClick={async () => {
           handleSignIn("oauth_google");
         }}
       >
-        <Mail className="w-4 h-4 mr-2" />
+        <Mail className="mr-2 h-4 w-4" />
         Continue with Google
       </Button>
       <Button
@@ -53,7 +53,7 @@ function OAuthButtons() {
           handleSignIn("oauth_github");
         }}
       >
-        <Github className="w-4 h-4 mr-2" />
+        <Github className="mr-2 h-4 w-4" />
         Continue with GitHub
       </Button>
     </div>

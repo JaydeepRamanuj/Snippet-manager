@@ -48,7 +48,6 @@ function SignupForm({
       // Set 'verifying' true to display second form
       // and capture the OTP code
       // setVerifying(true);
-      console.log("result =>", result);
 
       if (result.status == "complete") {
         showToast({ msg: "Signup successful.", type: "success" });
@@ -68,7 +67,6 @@ function SignupForm({
 
   const handleVerify = async () => {
     if (!signUp || !setActive) return;
-    console.log("Inside handleVerify");
     try {
       // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
@@ -78,7 +76,6 @@ function SignupForm({
       // If verification was completed, set the session to active
       // and redirect the user
       if (signUpAttempt.status === "complete") {
-        console.log("Complete");
         await setActive({ session: signUpAttempt.createdSessionId });
         setVerifying(false);
         setAuthDialog(false);
@@ -101,7 +98,6 @@ function SignupForm({
         <OTPInput
           handleSubmit={(val) => {
             setCode(val);
-            console.log("Calling handleVerify");
             handleVerify();
           }}
         />

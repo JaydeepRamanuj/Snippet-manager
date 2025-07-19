@@ -162,7 +162,6 @@ function MainPage() {
         const result = await response.json();
         result.data && showToast({ msg: "Snippet created", type: "success" });
 
-        // console.log("result =>", result);
         setLoadedSnippets([
           ...loadedSnippets,
           { ...newSnippet, _id: result.data },
@@ -177,11 +176,9 @@ function MainPage() {
 
   // If snippet is already been created
   const saveSnippet = async () => {
-    console.log("updating snippet");
-
     try {
       const token = await getToken();
-      console.log({ ...currentSnippet, code: code, note: note });
+      // console.log({ ...currentSnippet, code: code, note: note });
       const options = {
         method: "PUT",
         headers: {
@@ -190,14 +187,12 @@ function MainPage() {
         },
         body: JSON.stringify({ ...currentSnippet, code: code, note: note }),
       };
-      console.log("currentSnippet._id =>", currentSnippet._id);
       const response = await fetch(
         `${backendURL}/api/snippets/${currentSnippet._id}`,
         options,
       );
 
       if (response.ok) {
-        console.log(response);
         showToast({ msg: "Snippet updated", type: "success" });
         setIsSnippetDetailsUpdated(false);
       } else {

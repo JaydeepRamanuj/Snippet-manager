@@ -31,7 +31,6 @@ export function InputTags({
               size={10}
               className="cursor-pointer text-white"
               onClick={() => {
-                console.log("clicked");
                 setTags(tags.filter((t) => t !== tag));
               }}
             />

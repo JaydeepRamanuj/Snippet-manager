@@ -100,7 +100,7 @@ export default function SnippetTitleBar({
   };
 
   const handleTagClick = (value: string) => {
-    console.log(value);
+    // console.log(value);
   };
 
   const handleTagRemove = async (value: string) => {
@@ -156,16 +156,42 @@ export default function SnippetTitleBar({
   useEffect(() => {
     setLanguage(currentSnippet.language);
     setFolder(currentSnippet.folderName);
+    setRenaming(false);
+    setTitleInpVal(currentSnippet.title);
   }, [currentSnippet]);
+
+  const removeTitleInput = (e: MouseEvent | KeyboardEvent) => {
+    if (!isRenaming) return;
+    if (e instanceof KeyboardEvent && e.key === "Escape") {
+      setRenaming(false);
+      return;
+    }
+
+    if (
+      e instanceof MouseEvent &&
+      titleInput.current &&
+      !titleInput.current.contains(e.target as Node)
+    ) {
+      setRenaming(false);
+    }
+  };
 
   // wrapping inside timeout so ref can access element and apply focus
   useEffect(() => {
     setTimeout(() => {
       if (isRenaming && titleInput.current) {
-        titleInput.current.focus();
         titleInput.current?.select();
+        titleInput.current.focus();
       }
     }, 50);
+
+    document.addEventListener("mousedown", removeTitleInput);
+    document.addEventListener("keydown", removeTitleInput);
+
+    return () => {
+      document.removeEventListener("mousedown", removeTitleInput);
+      document.removeEventListener("keydown", removeTitleInput);
+    };
   }, [isRenaming]);
 
   return (

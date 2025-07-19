@@ -47,8 +47,6 @@ export function NewSnippetDialog() {
 
     const existingFolder = loadedFolders.find((f) => f.name === folder);
 
-    console.log("existingFolder =>", existingFolder);
-    console.log("folder =>", folder);
     const newSnippet: Omit<SnippetType, "_id"> = {
       createdAt: formatDateToIndianStyle(),
       language: isLanguage(language) ? language : "javascript",
@@ -63,7 +61,6 @@ export function NewSnippetDialog() {
       userId: user?.id,
     };
 
-    // console.log("newSnippet =>", newSnippet);
     try {
       const options = {
         method: "POST",
@@ -80,7 +77,6 @@ export function NewSnippetDialog() {
         response && showToast({ msg: "Snippet created", type: "success" });
         const result = await response.json();
 
-        console.log("result =>", result);
         setCurrentSnippet({ _id: result.data, ...newSnippet });
         setLoadedSnippets([
           ...loadedSnippets,
