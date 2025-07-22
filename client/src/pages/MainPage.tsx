@@ -166,6 +166,7 @@ function MainPage() {
           ...loadedSnippets,
           { ...newSnippet, _id: result.data },
         ]);
+        setCurrentSnippet({ ...newSnippet, _id: result.data });
         setIsSnippetDetailsUpdated(false);
       }
     } catch (error) {
@@ -214,6 +215,7 @@ function MainPage() {
 
   // Registering keybind to save update snippet
   useHotkey("Ctrl+s", () => {
+    if (!isSnippetDetailsUpdated) return;
     currentSnippet._id ? saveSnippet() : createSnippet();
   });
 

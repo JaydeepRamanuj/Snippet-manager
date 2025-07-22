@@ -113,7 +113,7 @@ router.put("/:id", requireAuth, async (req: Request, res: Response) => {
     const payload = req.body;
 
     const { _id, ...snippetPart } = payload;
-    console.log("snippetPart =>", snippetPart);
+    // console.log("snippetPart =>", snippetPart);
 
     if (!snippetPart) return res.status(400).send("Bad Request.");
 
