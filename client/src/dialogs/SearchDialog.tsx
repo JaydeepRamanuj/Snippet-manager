@@ -4,7 +4,6 @@ import { useAppStore } from "@/store/appStore";
 import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import { Code, Folder, Info, SearchIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import ReactDOM from "react-dom";
 import { DialogHeader } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { SnippetType } from "@/types/snippetType";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 function SearchDialog() {
   const {
     showSearchDialog,
@@ -132,8 +132,8 @@ function SearchDialog() {
   // Handle keyBoard events like ArrowUp, ArrowDown, Enter and Escape for both suggestion Items and Input
   const handleSuggestionNavigation = (e: React.KeyboardEvent) => {
     if (showSuggestion) {
-      e.preventDefault();
       if (e.key === "ArrowDown") {
+        e.preventDefault();
         // This will ensure we stay inside items and goes up when pressed down on last item
         const next = (currentSuggestionItem + 1) % suggestionItems.length;
         setCurrentItem(next);
@@ -141,6 +141,7 @@ function SearchDialog() {
       }
 
       if (e.key === "ArrowUp") {
+        e.preventDefault();
         // This will ensure we stay inside items and goes down when pressed up on first item
         const prev =
           (currentSuggestionItem - 1 + suggestionItems.length) %
@@ -228,7 +229,7 @@ function SearchDialog() {
 
     if (!mirrorRef.current || !inputRef.current || !containerRef.current)
       return;
-
+    // Here I'm filtering the suggestion and toggling suggestion menu so it can be visible
     if (val.includes("#")) {
       const token = val.split("#").pop() || "";
       setSuggestionItems(
@@ -243,7 +244,9 @@ function SearchDialog() {
       setSuggestionItems(
         foldersList
           .filter((folder) => filters.folder != folder)
-          .filter((folder) => folder.startsWith(token)),
+          .filter((folder) =>
+            folder.toLocaleLowerCase().startsWith(token.toLocaleLowerCase()),
+          ),
       );
       setSuggestionType("folder");
       setShowSuggestion(true);
@@ -252,7 +255,9 @@ function SearchDialog() {
       setSuggestionItems(
         languageList
           .filter((lang) => filters.language != lang)
-          .filter((lang) => lang.startsWith(token)),
+          .filter((lang) =>
+            lang.toLocaleLowerCase().startsWith(token.toLocaleLowerCase()),
+          ),
       );
       setSuggestionType("language");
       setShowSuggestion(true);
@@ -260,9 +265,8 @@ function SearchDialog() {
       setShowSuggestion(false);
     }
 
-    // const rect = mirrorRef.current.getBoundingClientRect();
-    // setSuggestionMenuPos({ top: rect.top + rect.height + 20, left: rect.left });
-
+    // I want to show suggestion menu where user's caret is
+    // So here I'm finding that position and adding little offset so it can be seen clearly
     const childRect = mirrorRef.current.getBoundingClientRect();
     const parentRect = containerRef.current.getBoundingClientRect();
 
@@ -270,9 +274,6 @@ function SearchDialog() {
     const offsetLeft = childRect.left - parentRect.left;
     const childHeight = mirrorRef.current.clientHeight;
 
-    console.log("    offsetTop => ", offsetTop);
-    console.log("offsetLeft => ", offsetLeft);
-    console.log("childHeight => ", childHeight);
     setSuggestionMenuPos({
       top: offsetTop + childHeight + 15,
       left: offsetLeft,
@@ -310,7 +311,7 @@ function SearchDialog() {
     <Dialog open={showSearchDialog} onOpenChange={setSearchDialog}>
       <DialogContent
         ref={containerRef}
-        className="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-stone-900 p-3 sm:w-fit"
+        className="bg-sidebar absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg border p-3 sm:w-fit"
       >
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle className="text-neutral-300">Search Bar</DialogTitle>
@@ -324,7 +325,7 @@ function SearchDialog() {
                 <kbd className="rounded-sm border bg-white/5 p-1 font-mono text-xs font-semibold">
                   #
                 </kbd>
-                <span>to search tags Ex.</span>
+                <span>to search tags i.e. </span>
                 <kbd className="rounded-sm border bg-white/5 px-1 py-0.5 font-mono text-xs font-semibold">
                   #React
                 </kbd>
@@ -334,7 +335,7 @@ function SearchDialog() {
                 <kbd className="rounded-sm border bg-white/5 p-1 font-mono text-xs font-semibold">
                   @
                 </kbd>
-                <span>to search folders Ex.</span>
+                <span>to search folders i.e. </span>
                 <kbd className="rounded-sm border bg-white/5 px-1 py-0.5 font-mono text-xs font-semibold">
                   @Hooks
                 </kbd>
@@ -344,7 +345,7 @@ function SearchDialog() {
                 <kbd className="rounded-sm border bg-white/5 p-1 font-mono text-xs font-semibold">
                   .
                 </kbd>
-                <span>to search languages Ex.</span>
+                <span>to search languages i.e. </span>
                 <kbd className="rounded-sm border bg-white/5 px-1 py-0.5 font-mono text-xs font-semibold">
                   .javascript
                 </kbd>
@@ -354,7 +355,9 @@ function SearchDialog() {
         </DialogHeader>
 
         <div className="bg-muted mt-3 flex items-center justify-between gap-3 rounded-lg p-1.5">
-          <div className="relative flex max-w-xl flex-wrap gap-2 rounded-md border border-neutral-400/40 bg-white/5 p-1.5">
+          <div className="relative flex w-full max-w-2xl flex-wrap gap-2 rounded-md p-1.5 md:w-fit">
+            {/* I'm printing badges for tags, folders and language before input */}
+            {/* If you change order of them, make sure you also change the order of filter removing function on 'Backspace' */}
             {filters.folder && (
               <Badge variant="outline" className="bg-orange-500/20">
                 <Folder size={12} />
@@ -374,14 +377,14 @@ function SearchDialog() {
                 </Badge>
               ))}
             <div className="relative w-fit">
-              <input
+              <Input
                 ref={inputRef}
                 type="text"
                 value={inpVal}
                 onChange={handleInputChange}
                 onKeyDown={handleSuggestionNavigation}
                 placeholder="Ex. snippet.tsx"
-                className="border-0 bg-transparent ring-0 outline-0"
+                className="border-0 bg-transparent focus-visible:ring-0 focus-visible:outline-none"
               />
               <div
                 ref={mirrorRef}
@@ -392,13 +395,11 @@ function SearchDialog() {
             </div>
           </div>
 
-          <Button variant="outline" size="icon">
+          {/* <Button variant="outline" size="icon">
             <SearchIcon className="text-neutral-400" />
-          </Button>
+          </Button> */}
 
           {showSuggestion && suggestionItems.length > 0 && (
-            // <div
-            //   className="absolute z-50 flex max-h-[300px] flex-col space-y-1 overflow-auto bg-neutral-800 p-2"
             <div
               className="absolute z-50 w-fit rounded-md bg-neutral-800"
               style={{
@@ -406,7 +407,7 @@ function SearchDialog() {
                 left: `${suggestionMenuPos.left}px`,
               }}
             >
-              <ScrollArea className="flex h-[300px] w-fit flex-col p-2">
+              <ScrollArea className="flex max-h-[300px] w-fit flex-col p-2">
                 {suggestionItems.map((item, i) => (
                   <button
                     key={i}
@@ -466,7 +467,7 @@ function SearchDialog() {
                       : "hover:bg-neutral-700",
                   )}
                 >
-                  <div className="flex justify-between text-neutral-400">
+                  <div className="flex justify-between gap-3 text-neutral-400">
                     <span>{item.name}</span>
                     <span className="flex items-center gap-2 text-xs text-gray-400">
                       <Folder size={12} /> {item.folderName}

@@ -17,7 +17,6 @@ export default function SearchBar({ onFocus }: { onFocus?: () => void }) {
           }}
         >
           <Search className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
-
           <Input
             type="search"
             placeholder="Search snippets..."
@@ -25,8 +24,14 @@ export default function SearchBar({ onFocus }: { onFocus?: () => void }) {
             className="h-9 pr-20 pl-10 text-sm"
           />
 
-          <div className="text-muted-foreground pointer-events-none absolute top-1.5 right-3 hidden items-center gap-1 rounded border px-1.5 py-0.5 text-xs sm:flex">
-            Ctrl + k
+          <div className="absolute top-1.5 right-3 hidden items-center gap-2 sm:flex">
+            <div className="text-muted-foreground pointer-events-none items-center gap-1 rounded border px-1.5 py-0.5 text-xs sm:flex">
+              Ctrl + k
+            </div>
+            <span className="text-muted-foreground hidden sm:block">or</span>
+            <div className="text-muted-foreground pointer-events-none items-center gap-1 rounded border px-1.5 py-0.5 text-xs sm:flex">
+              Ctrl + p
+            </div>
           </div>
         </div>
       ) : (
