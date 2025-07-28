@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button";
 import { useHotkey } from "@/hooks/useHotKeys";
 import { useAppStore } from "@/store/appStore";
 import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
-import { Code, Folder, Info, SearchIcon } from "lucide-react";
+import { Code, Folder, Info } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DialogHeader } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -163,6 +162,7 @@ function SearchDialog() {
             if (suggestionType == "tags") {
               return { ...prev, tags: [...prev.tags, selected] };
             }
+            return prev;
           });
           setShowSuggestion(false);
           inputRef.current?.focus();
