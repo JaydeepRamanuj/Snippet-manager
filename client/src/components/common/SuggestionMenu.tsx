@@ -15,7 +15,7 @@ type SuggestionMenuType = {
 };
 
 const SuggestionMenu = forwardRef<HTMLDivElement, SuggestionMenuType>(
-  ({ items, top, left, show, setShow }, forwardedRef) => {
+  ({ items, top, left, show }, forwardedRef) => {
     const [currentItem, setCurrentItem] = useState(0);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
     const containerRef = useRef<HTMLDivElement | null>(null);

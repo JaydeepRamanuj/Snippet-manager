@@ -1,6 +1,5 @@
 import { AppSidebar } from "@/components/AppSideBar";
 import MainPage from "./MainPage";
-import { CommandMenu } from "@/components/CommandMenu";
 import { Shortcuts } from "@/components/Shortcut";
 import Dialogs from "@/dialogs/Dialogs";
 import { Toaster } from "sonner";
@@ -11,7 +10,6 @@ function HomePage() {
       <AppSidebar />
       <main className="grow overflow-auto">
         <MainPage />
-        {/* <CommandMenu /> */}
         <Shortcuts />
         <Dialogs />
         <Toaster position="top-center" />
