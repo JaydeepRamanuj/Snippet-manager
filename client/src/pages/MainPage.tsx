@@ -8,7 +8,6 @@ import { GripHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { useHotkey } from "@/hooks/useHotKeys";
-import { SettingsDialog } from "@/dialogs/SettingsDialog";
 import showToast from "@/components/common/Toast";
 
 function MainPage() {
@@ -248,7 +247,6 @@ function MainPage() {
           />
         </Panel>
       </PanelGroup>
-      <SettingsDialog />
     </div>
   );
 }

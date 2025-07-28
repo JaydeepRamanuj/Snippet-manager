@@ -19,7 +19,7 @@ const settingOptions = [
   { key: "whats-new", label: "What's new" },
 ];
 
-export function SettingsDialog() {
+function SettingsDialog() {
   const { showSettingsDialog, setSettingsDialog, currentSettingsTab } =
     useAppStore();
 
@@ -107,3 +107,5 @@ export function SettingsDialog() {
     </Dialog>
   );
 }
+
+export default SettingsDialog;

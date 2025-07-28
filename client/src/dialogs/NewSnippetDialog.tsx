@@ -13,17 +13,13 @@ import { InputTags } from "../components/InputTags";
 import { useAppStore } from "@/store/appStore";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import type { SnippetType } from "@/types/snippetType";
-import {
-  allowedLanguages,
-  capitalize,
-  formatDateToIndianStyle,
-  isLanguage,
-} from "@/lib/utils";
+import { capitalize, formatDateToIndianStyle, isLanguage } from "@/lib/utils";
 import { CustomDropDown } from "../components/common/customDropDown";
 import showToast from "../components/common/Toast";
 
 export function NewSnippetDialog() {
-  const { showNewFileDialog, setNewFileDialog, loadedFolders } = useAppStore();
+  const { showNewFileDialog, setNewFileDialog, loadedFolders, languageList } =
+    useAppStore();
   const [title, setTitle] = useState("");
   const [folder, setFolder] = useState("");
   const [language, setLanguage] = useState("");
@@ -113,11 +109,11 @@ export function NewSnippetDialog() {
   }, [loadedFolders]);
 
   const languageOptions = useMemo(() => {
-    return allowedLanguages.map((language) => ({
+    return languageList.map((language) => ({
       label: capitalize(language),
       value: language,
     }));
-  }, [allowedLanguages]);
+  }, [languageList]);
 
   useEffect(() => {
     return () => {

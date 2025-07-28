@@ -29,6 +29,9 @@ interface AppState {
   currentSettingsTab: string;
   shownDesktopOptimizedDialog: boolean;
   openFolders: string[];
+  foldersList: string[];
+  tagsList: string[];
+  languageList: string[];
 
   toggleSidebar: () => void;
   setEditingMode: (value: boolean) => void;
@@ -55,6 +58,8 @@ interface AppState {
   setCurrentSettingsTab: (value: string) => void;
   setDesktopOptimizedDialog: (value: boolean) => void;
   setOpenFolders: (value: string[]) => void;
+  setFoldersList: (value: string[]) => void;
+  setTagsList: (value: string[]) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -100,6 +105,21 @@ export const useAppStore = create<AppState>()(
       currentSettingsTab: "account",
       shownDesktopOptimizedDialog: true,
       openFolders: ["index"],
+      foldersList: [],
+      tagsList: [],
+      languageList: [
+        "javascript",
+        "typescript",
+        "html",
+        "css",
+        "python",
+        "cpp",
+        "java",
+        "go",
+        "json",
+        "bash",
+        "other",
+      ],
 
       toggleSidebar: () =>
         set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
@@ -115,7 +135,19 @@ export const useAppStore = create<AppState>()(
       setAuthDialog: (value) => set({ showAuthDialog: value }),
       setSettingsDialog: (value) => set({ showSettingsDialog: value }),
       setAlertDialogMessage: (str) => set({ alertDialogMessage: str }),
-      setCurrentSnippet: (snippet) => set({ currentSnippet: snippet }),
+      setCurrentSnippet: (snippet) =>
+        set((state) => {
+          const recent10Snippets = [
+            snippet._id,
+            ...state.recentSnippets.filter((id) => id !== snippet._id),
+          ].slice(0, 10);
+
+          return {
+            currentSnippet: snippet,
+            recentSnippets: recent10Snippets,
+          };
+        }),
+
       setCurrentFolder: (folderId) => set({ currentFolder: folderId }),
       setLoadedSnippets: (snippets) => set({ loadedSnippets: snippets }),
       setLoadedFolders: (folders) => set({ loadedFolders: folders }),
@@ -143,6 +175,8 @@ export const useAppStore = create<AppState>()(
             recentSnippets: recent10Snippets,
           };
         }),
+      setFoldersList: (folders) => set({ foldersList: folders }),
+      setTagsList: (tags) => set({ tagsList: tags }),
     }),
     {
       name: "snippet-manager-app-storage",

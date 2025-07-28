@@ -5,6 +5,8 @@ import { NewFolderDialog } from "./NewFolderDialog";
 import NewChangeLogDialog from "../components/ChangeLogForm";
 import DesktopOptimizedDialog from "./DesktopOptimizedDialog";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
+import SearchDialog from "./SearchDialog";
+import SettingsDialog from "./SettingsDialog";
 
 function Dialogs() {
   const breakpoints = useBreakpoint();
@@ -16,6 +18,8 @@ function Dialogs() {
       <AuthDialog />
       <CustomAlertDialog />
       <NewChangeLogDialog />
+      <SearchDialog />
+      <SettingsDialog />
       {breakpoints && breakpoints < 600 && <DesktopOptimizedDialog />}
     </div>
   );

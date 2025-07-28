@@ -11,7 +11,7 @@ function HomePage() {
       <AppSidebar />
       <main className="grow overflow-auto">
         <MainPage />
-        <CommandMenu />
+        {/* <CommandMenu /> */}
         <Shortcuts />
         <Dialogs />
         <Toaster position="top-center" />

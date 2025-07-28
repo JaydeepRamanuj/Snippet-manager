@@ -68,6 +68,8 @@ export function AppSidebar() {
     currentFolder,
     openFolders,
     setOpenFolders,
+    setTagsList,
+    setFoldersList,
   } = useAppStore();
   // console.log("user.id =>", user?.id);
 
@@ -90,6 +92,12 @@ export function AppSidebar() {
         // console.log("result =>", result);
         setSnippets(result);
         setLoadedSnippets(result);
+        let tags = result.map((snippet: SnippetType) => {
+          return snippet.tags;
+        });
+        tags = tags.flat();
+        tags = [...new Set(tags)];
+        setTagsList(tags);
       }
     } catch (error) {
       console.log("Error getting snippets", error);
@@ -116,6 +124,11 @@ export function AppSidebar() {
         // console.log("result =>", result);
         setFolders([...loadedFolders, ...result]);
         setLoadedFolders([...loadedFolders, ...result]);
+        let folders = result.map((folder: FolderType) => {
+          return folder.name;
+        });
+        folders = [...new Set(folders)];
+        setFoldersList(["index", ...folders]);
       }
     } catch (error) {
       console.log("Error getting folders", error);

@@ -11,7 +11,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { Edit, MoreVertical, Plus, Trash, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { allowedLanguages, capitalize, isLanguage } from "@/lib/utils";
+import { capitalize, isLanguage } from "@/lib/utils";
 import { CustomDropDown } from "./common/customDropDown";
 import { useAppStore } from "@/store/appStore";
 import showToast from "./common/Toast";
@@ -43,8 +43,13 @@ export default function SnippetTitleBar({
   const [language, setLanguage] = useState(snippet.language);
   const [folder, setFolder] = useState(snippet.folderName ?? "Index");
   const [isRenaming, setRenaming] = useState<boolean>(false);
-  const { currentSnippet, loadedFolders, setLoadedSnippets, loadedSnippets } =
-    useAppStore();
+  const {
+    currentSnippet,
+    loadedFolders,
+    setLoadedSnippets,
+    loadedSnippets,
+    languageList,
+  } = useAppStore();
   const [isSaveBadgeHover, setSaveBadgeHover] = useState<boolean>(false);
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -135,11 +140,11 @@ export default function SnippetTitleBar({
   };
 
   const languageOptions = useMemo(() => {
-    return allowedLanguages.map((language) => ({
+    return languageList.map((language) => ({
       label: capitalize(language),
       value: language,
     }));
-  }, [allowedLanguages]);
+  }, [languageList]);
 
   const folderOptions = useMemo(() => {
     return [
